@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Library Hub</title>
+  <link rel="stylesheet" href="stylee.css">
+  <script defer src="script.js"></script>
+  
+</head>
+<body>
+
+
+  <!-- Header -->
+  <header>
+    <h1>📚 Lonnganisa Seller</h1>
+    <nav class="navbar">
+      <a href= "index.html" data-section="latest" >Latest</a>
+      <a href= "Featured.html" data-section="featured" >skdksFeatured</a>
+      <a href= "Event.html" data-section="events" >Events</a>
+      <a href= "Authors.html" data-section="authors" >Authors</a>
+      <a href= "Library.html" data-section="author" >Library</a>
+  
+  
+    </nav>
+
+    
+    <div class="icons">
+      <span id="searchToggle">🔍</span>
+      <span>🛒</span>
+      <span>👤</span>
+      <span id="modeToggle">🌙</span>
+    </div>
+  </header>
+
+  <!-- Welcome Section -->
+  <section class="welcome">
+    <div class="welcome-text">
+      <h1>Welcome to Digital Library Hub 📚</h1>
+      <p>Your all-in-one online library for endless reading adventures.  
+        Access thousands of e-books, discover new authors, and join events that connect book lovers worldwide.</p>
+      <form class="search-bar">
+        <input type="text" placeholder="Search by keyword, title, or author...">
+        <button type="submit">🔍</button>
+      </form>
+    </div>
+  </section>
+
+
+  <!-- Carousel Slider -->
+  <section class="carousel">
+    <h2>Trending Books</h2>
+    <button class="carousel-btn prev">&#10094;</button>
+    <div class="carousel-track" id="carouselTrack">
+      <div class="carousel-item"><img src="ASSETS/ASSETS/fantacy2.jpg"><h3>The Lottery</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book8.jpg"><h3>Simplicity</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book7.jpg"><h3>Hagseed</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book5.jpg"><h3>One Dark Window</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book3.jpg"><h3>Out of the Wood</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book9.jpg"><h3>Connected Hearts</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book1.jpg"><h3>Heart Spring Mountain</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book4.jpg"><h3>Weird Tales</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/book2.jpg"><h3>Woman of the Ashes</h3></div>
+      <div class="carousel-item"><img src="ASSETS/ASSETS/trend4.jpg"><h3>Cupid Match</h3></div>
+      
+
+    </div>
+    <button class="carousel-btn next">&#10095;</button>
+  </section>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const saveButtons = document.querySelectorAll(".save-btn");
+
+  saveButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const bookElement = button.closest(".book");
+      const img = bookElement.querySelector("img")?.src || "";
+      const title = bookElement.querySelector("strong, h3")?.textContent || "Untitled Book";
+      const author = "Unknown Author";
+
+      // Get saved books
+      let savedBooks = JSON.parse(localStorage.getItem("savedBooks")) || [];
+
+      // Avoid duplicates
+      const alreadySaved = savedBooks.some(book => book.title === title);
+      if (alreadySaved) {
+        alert(`📚 "${title}" is already in your library!`);
+        return;
+      }
+
+      // Add new book
+      savedBooks.push({ title, author, img });
+
+      // Save to localStorage
+      localStorage.setItem("savedBooks", JSON.stringify(savedBooks));
+
+      alert(`✅ "${title}" has been saved to your library!`);
+    });
+  });
+});
+</script>
+
+
+
+<!-- Categories -->
+<section class="categories">
+  <h2>📖 Explore by Categories</h2>
+
+  <div class="category">
+    <h3>Academic</h3>
+    <div class="book-card">
+    <div class="books">
+      <div class="book">
+        <img src="ASSETS/ASSETS/acads4.jpg" alt="English Academic">
+        <p><strong>English Academic</strong></p>
+        <small>A guide to mastering academic writing, grammar, and communication skills.</small>
+
+        <!-- ⭐ Star Rating -->
+        <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+        </div>
+
+        <!-- 💾 Save Button -->
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+
+      <div class="book">
+        <img src="ASSETS/ASSETS/acad1.jpg" alt="Philippine History">
+        <p><strong>Philippine History</strong></p>
+        <small>Explores the Philippines’ journey from pre-colonial times to the modern era.</small>
+
+        <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+
+      <div class="book">
+        <img src="ASSETS/ASSETS/acad3.jpg" alt="Noli Me Tangere">
+        <p><strong>Noli Me Tangere</strong></p>
+        <small>José Rizal’s timeless novel highlighting colonial injustices and reforms.</small>
+
+        <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <div class="category">
+    <h3>Entertainment (Romance)</h3>
+    <div class="books">
+      <div class="book">
+        <img src="ASSETS/ASSETS/romance1.jpg">
+        <p><strong>Splinters</strong></p>
+        <small>A tale of two souls healing each other DJSKDK after heartbreak.</small>
+
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+      
+      <div class="book">
+        <img src="ASSETS/ASSETS/romance2.jpg">
+        <p><strong>Night Shade</strong></p>
+        <small>A forbidden romance set against the backdrop of mystery and secrets.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+  
+      <div class="book">
+        <img src="ASSETS/ASSETS/romance3.jpg">
+        <p><strong>Romance Rivalry</strong></p>
+        <small>When love turns competitive, who truly wins the heart?</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Entertainment (Fantasy)</h3>
+    <div class="books">
+      <div class="book">
+        <img src="ASSETS/ASSETS/fantacy 1.jpg">
+        <p><strong>Queen of Carrion</strong></p>
+        <small>A fantasy saga about a queen rising from ashes to reclaim her throne.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+  
+      <div class="book">
+        <img src="ASSETS/ASSETS/fantacy2.jpg">
+        <p><strong>The Lottery</strong></p>
+        <small>A chilling fantasy tale where fate is decided by chance.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+      <div class="book">
+        <img src="ASSETS/ASSETS/fantacy4.jpg">
+        <p><strong>SwordHeart</strong></p>
+        <small>Adventure, magic, and a talking sword that changes destiny.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Sci-Fi</h3>
+    <div class="books">
+      <div class="book">
+        <img src="ASSETS/ASSETS/fiction1.jpg">
+        <p><strong>Tear my World</strong></p>
+        <small>A scientist faces the collapse of parallel universes.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+      <div class="book">
+        <img src="ASSETS/ASSETS/fiction2.jpg">
+        <p><strong>Alien Invasion</strong></p>
+        <small>Earth’s survival hinges on unlikely heroes resisting alien forces.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+      <div class="book">
+        <img src="ASSETS/ASSETS/fiction3.jpg">
+        <p><strong>Study in Scarlet</strong></p>
+        <small>A futuristic detective mystery unraveling coded conspiracies.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="category">
+    <h3>Comics</h3>
+    <div class="books">
+      <div class="book">
+        <img src="ASSETS/ASSETS/comics2.jpg">
+        <p><strong>True Beauty</strong></p>
+        <small>A heartwarming comic about love, beauty, and self-confidence.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    
+      <div class="book">
+        <img src="ASSETS/ASSETS/comics3.jpg">
+        <p><strong>Spider Amazing</strong></p>
+        <small>Spider-Man’s adventures balancing hero life and personal struggles.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+  
+      <div class="book">
+        <img src="ASSETS/ASSETS/comics5.jpg">
+        <p><strong>We’re Not Just Friends</strong></p>
+        <small>A comic about love blossoming from friendship.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    
+      <div class="book">
+        <img src="ASSETS/ASSETS/comics1.jpg">
+        <p><strong>Hooky</strong></p>
+        <small>A magical journey of siblings discovering their destiny.</small>
+         <div class="stars">
+          <span>★</span>
+          <span>★</span>
+          <span>★</span>
+          <span>☆</span>
+          <span>☆</span>
+        </div>
+
+        <button class="save-btn">💾 Save to Library</button>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+
+<!-- Latest Releases -->
+<section id="latest">
+  <h2> Latest Releases</h2>
+
+  <div class="latest-books">
+    <div class="book">
+      <img src="ASSETS/ASSETS/trend3.jpg" alt="Underworld">
+      <div class="book-info">
+        <h3>Underworld</h3>
+        <p class="price">$17.99</p>
+        <div class="stars">★★★★☆</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+
+    <div class="book">
+      <img src="ASSETS/ASSETS/trend1.jpg" alt="Doom Breaker">
+      <div class="book-info">
+        <h3>Doom Breaker</h3>
+        <p class="price">$15.99</p>
+        <div class="stars">★★★☆☆</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+
+    <div class="book">
+      <img src="ASSETS/ASSETS/trend5.jpg" alt="His Into Her">
+      <div class="book-info">
+        <h3>His Into Her</h3>
+        <p class="price">$25.99</p>
+        <div class="stars">★★★★★</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+
+    <div class="book">
+      <img src="ASSETS/ASSETS/trend2.jpg" alt="My Fair Position">
+      <div class="book-info">
+        <h3>My Fair Position</h3>
+        <p class="price">$20.99</p>
+        <div class="stars">★★★★☆</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+
+    <!-- 🆕 Add more books below if you want -->
+    <div class="book">
+      <img src="ASSETS/ASSETS/book6.jpg" alt="Echoes of Tomorrow">
+      <div class="book-info">
+        <h3>Echoes of Tomorrow</h3>
+        <p class="price">$19.99</p>
+        <div class="stars">★★★★★</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+
+    <div class="book">
+      <img src="ASSETS/ASSETS/book8.jpg" alt="Silent Fate">
+      <div class="book-info">
+        <h3>Silent Fate</h3>
+        <p class="price">$22.99</p>
+        <div class="stars">★★★☆☆</div>
+        <button class="save-btn">💾 Save to Library</button>
+        <button class="read-btn">📖 Read Book</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <section class="info-section fade-in">
+  <div class="newsletter">
+    <h2>Subscribe to Our Newsletter</h2>
+    <p>Get the latest updates on new books, featured authors, and upcoming events delivered straight to your inbox.</p>
+    <form class="subscribe-form">
+      <input type="email" placeholder="Enter your email address" required>
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+
+  <div class="info-columns">
+    <div class="col">
+      <h3>About Digital Library Hub</h3>
+      <p>Your one-stop online library where you can discover, read, and connect with authors and literary works worldwide.</p>
+      <div class="socials">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="authors.html">Authors</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="event.html">Events</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h3>Contact Us</h3>
+      <p><i class="fas fa-map-marker-alt"></i> 123 Library Street, Manila, Philippines</p>
+      <p><i class="fas fa-envelope"></i> info@digitallibraryhub.com</p>
+      <p><i class="fas fa-phone"></i> +63 912 345 6789</p>
+      <p><i class="fas fa-clock"></i> Mon - Fri: 8 AM - 6 PM</p>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>© 2025 Digital Library Hub | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    // Dark Mode Toggle
+    const modeToggle=document.getElementById("modeToggle");
+    modeToggle.onclick=()=>document.body.classList.toggle("dark");
+
+    // Carousel Function
+    const track=document.getElementById("carouselTrack");
+    const prev=document.querySelector(".carousel-btn.prev");
+    const next=document.querySelector(".carousel-btn.next");
+    let index=0;
+
+    function moveCarousel(){
+      const itemWidth=document.querySelector(".carousel-item").offsetWidth+20; 
+      track.style.transform=`translateX(-${index*itemWidth}px)`;
+    }
+
+    next.addEventListener("click",()=>{ 
+      if(index < track.children.length-3){ index++; moveCarousel(); }
+    });
+    prev.addEventListener("click",()=>{ 
+      if(index > 0){ index--; moveCarousel(); }
+    });
+  </script>
+
+
+
+
+
+</body>
+</html>

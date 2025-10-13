@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Library | Digital Library Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .library-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 40px;
+    }
+    .book-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .book-card:hover { transform: scale(1.05); }
+    .book-card img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .book-card h3 { margin: 10px 0 5px; color: #2c3e50; }
+    .book-card p { color: #555; font-size: 14px; }
+    .read-btn, .remove-btn {
+      background: #3a3a98;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin-top: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .read-btn:hover { background: #4a4ab8; }
+    .remove-btn {
+      background: #e74c3c;
+      margin-left: 10px;
+    }
+    .remove-btn:hover { background: #c0392b; }
+    .footer { text-align: center; padding: 20px; background: #222; color: #fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📚 Your Saved Library</h1>
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="Featured.html">Featured</a>
+      <a href="Event.html">Events</a>
+      <a href="Authors.html">Authors</a>
+      <a href="Library.html" class="active">Library</a>
+    </nav>
+  </header>
+
+  <section class="library-container" id="savedBooksContainer"></section>
+
+  <footer class="footer">
+    <p>© 2025 Digital Library Hub | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const container = document.getElementById("savedBooksContainer");
+
+    // Function to display saved books
+    function renderLibrary() {
+      const savedBooks = JSON.parse(localStorage.getItem("savedBooks")) || [];
+      container.innerHTML = "";
+
+      if (savedBooks.length === 0) {
+        container.innerHTML = "<p style='text-align:center;margin-top:40px;'>No saved books yet.</p>";
+        return;
+      }
+
+      savedBooks.forEach(book => {
+        const div = document.createElement("div");
+        div.classList.add("book-card");
+        div.innerHTML = `
+          <img src="${book.img}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <p>by ${book.author}</p>
+          <button class="read-btn">📖 Read</button>
+          <button class="remove-btn">🗑 Remove</button>
+        `;
+
+        // 🗑 Remove button function
+        div.querySelector(".remove-btn").addEventListener("click", () => {
+          const updatedBooks = savedBooks.filter(b => b.title !== book.title);
+          localStorage.setItem("savedBooks", JSON.stringify(updatedBooks));
+          renderLibrary(); // Refresh list
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    // First load
+    renderLibrary();
+
+    // 🔄 Auto-refresh when localStorage changes
+    window.addEventListener("storage", (event) => {
+      if (event.key === "savedBooks") {
+        renderLibrary();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -44,8 +44,8 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  /*border-top-left-radius: 20px;*/ /*uncomment kung gusto mo yung medyo round na corner*/
+  /*border-top-right-radius: 20px;*/
 }
 
 header h1 {
@@ -837,8 +837,8 @@ footer {
   padding: 25px;
   margin-top: 50px;
   font-size: 0.9rem;
-  /*border-top-left-radius: 20px;*/ /*uncomment kung gusto mo yung medyo round na corner*/
-  /*border-top-right-radius: 20px;*/
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 

@@ -840,3 +840,34 @@ footer {
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
+
+
+@media (max-width: 768px) {
+  header {
+    padding: 10px 20px;
+  }
+
+  header h1 {
+    font-size: 1.2rem;
+  }
+
+  .navbar a {
+    margin: 0 8px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 8px 15px;
+  }
+
+  header h1 {
+    font-size: 1rem;
+  }
+
+  .navbar a {
+    margin: 0 5px;
+    font-size: 0.85rem;
+  }
+}

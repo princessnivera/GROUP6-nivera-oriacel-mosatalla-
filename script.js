@@ -1,22 +1,45 @@
-// ========== DARK MODE TOGGLE ==========
-const body = document.body;
-const darkModeToggle = document.createElement("button");
-darkModeToggle.innerHTML = "🌙";
-darkModeToggle.classList.add("dark-toggle");
-document.querySelector("header").appendChild(darkModeToggle);
 
-// Apply saved theme
-if (localStorage.getItem("theme") === "dark") {
-  body.classList.add("dark");
-  darkModeToggle.innerHTML = "☀️";
-}
+document.addEventListener("DOMContentLoaded", () => {
+  // ========== NIGHT/DAY MODE ==========
+  const body = document.body;
+  const darkModeToggle = document.getElementById("modeToggle");
+  const savedTheme = localStorage.getItem("theme");
 
-darkModeToggle.addEventListener("click", () => {
-  body.classList.toggle("dark");
-  const isDark = body.classList.contains("dark");
-  darkModeToggle.innerHTML = isDark ? "☀️" : "🌙";
-  localStorage.setItem("theme", isDark ? "dark" : "light");
+  if (savedTheme === "dark") {
+    body.classList.add("dark");
+    darkModeToggle.textContent = "☀️";
+  }
+
+  darkModeToggle.addEventListener("click", () => {
+    body.classList.toggle("dark");
+    const isDark = body.classList.contains("dark");
+    darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+
+  // ========== SEARCH ICON ==========
+  const searchToggle = document.getElementById("searchToggle");
+  const searchBar = document.querySelector(".search-bar");
+  if (searchToggle && searchBar) {
+    searchToggle.addEventListener("click", () => {
+      const isVisible = searchBar.style.display === "flex" || searchBar.style.display === "block";
+      searchBar.style.display = isVisible ? "none" : "flex";
+    });
+  }
+
+  // ========== ACCOUNT ICON ==========
+  const accountIcon = document.querySelector(".icons span:nth-child(2)");
+  if (accountIcon) {
+    accountIcon.style.cursor = "pointer";
+    accountIcon.addEventListener("click", () => {
+      const confirmLogin = confirm("Do you want to sign in or create an account?");
+      if (confirmLogin) {
+        window.location.href = "login.html";
+      }
+    });
+  }
 });
+
 
 
 // ========== SMOOTH SCROLL ==========
@@ -156,5 +179,4 @@ if (libraryContainer) {
     `).join("");
   }
 }
-
 

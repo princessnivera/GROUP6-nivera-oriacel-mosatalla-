@@ -871,3 +871,53 @@ footer {
     font-size: 0.85rem;
   }
 }
+/* ====== LOGIN PAGE ====== */
+ body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #f3f4f6, #e0e7ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 350px;
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+    .login-container input {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .login-container button {
+      background: #4a4ef5;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .login-container button:hover {
+      background: #373ae0;
+    }
+    .login-container a {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #4a4ef5;
+      text-decoration: none;
+    }

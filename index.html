@@ -627,10 +627,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   </script>
 
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // === Search Toggle ===
+  const searchToggle = document.getElementById("searchToggle");
+  const searchBar = document.querySelector(".search-bar");
+
+  searchToggle.addEventListener("click", () => {
+    searchBar.classList.toggle("show");
+    if (searchBar.classList.contains("show")) {
+      searchBar.querySelector("input").focus();
+    }
+  });
+
+  // === Account/Login Modal Toggle ===
+  const accountToggle = document.getElementById("accountToggle");
+  const loginModal = document.getElementById("loginModal");
+  const closeLogin = document.getElementById("closeLogin");
+
+  accountToggle.addEventListener("click", () => {
+    loginModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  });
+
+  closeLogin.addEventListener("click", () => {
+    loginModal.classList.remove("show");
+    document.body.style.overflow = "";
+  });
+
+  loginModal.addEventListener("click", (e) => {
+    if (e.target === loginModal) {
+      loginModal.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+  });
+});
+</script>
+
 
 
 
 
 </body>
 </html>
+
 

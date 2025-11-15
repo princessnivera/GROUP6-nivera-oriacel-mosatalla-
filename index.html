@@ -5,34 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Library Hub</title>
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
   
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="script.js"></script>
+
 </head>
+
 <body>
 
 
-  <!-- Header -->
   <header>
     <h1>📚 Digital Library Hub </h1>
     <nav class="navbar">
-      <a href= "index.html" data-section="latest" >Latest</a>
+      <a href= "index.html" class="active" data-section="latest" >Latest</a>
       <a href= "Featured.html" data-section="featured" >Featured</a>
       <a href= "Event.html" data-section="events" >Events</a>
       <a href= "Authors.html" data-section="authors" >Authors</a>
       <a href= "Library.html" data-section="library" >Library</a>
-  
-  
+      
     </nav>
 
     
     <div class="icons">
       <span id="searchToggle">🔍</span>
-      <span>👤</span>
+      <span id="accountToggle">👤</span>
       <span id="modeToggle">🌙</span>
     </div>
   </header>
 
-  <!-- Welcome Section -->
   <section class="welcome">
     <div class="welcome-text">
       <h1>Welcome to Digital Library Hub 📚</h1>
@@ -46,7 +46,6 @@
   </section>
 
 
-  <!-- Carousel Slider -->
   <section class="carousel">
     <h2>Trending Books</h2>
     <button class="carousel-btn prev">&#10094;</button>
@@ -97,7 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<!-- ===== Story Modal (paste this before </body>) ===== -->
 <div id="storyModal" class="story-modal" aria-hidden="true">
   <div class="story-content" role="dialog" aria-modal="true">
     <button id="closeModal" class="close-modal" aria-label="Close story">&times;</button>
@@ -107,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 </div>
 
 <style>
+/* CSS para sa Story Modal (OK lang na manatili dito) */
 .story-modal { display: none; position: fixed; z-index: 9999; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding: 20px; }
 .story-modal.show { display: flex; }
 .story-content { background: #fff; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto; border-radius: 12px; padding: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); position: relative; }
@@ -118,23 +117,24 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const stories = {
-    "English Academic": "English Academic focuses on building students’ skills in reading, writing, and critical thinking. It teaches how to construct well-organized essays, use appropriate grammar, and express ideas clearly. Students explore various forms of literature, academic writing, and speech.  \n\n Through research and discussions, they learn how to analyze information effectively. The subject promotes intellectual growth and clarity in communication.\n\n Overall, it prepares learners to write and speak confidently in academic and real-world settings.",
-    "Philippine History": "Philippine History explores the country’s journey from pre-colonial times to the present day. It discusses how early Filipino societies lived, traded, and governed themselves before the arrival of foreign powers. The book also narrates the Spanish colonization, American occupation, and Japanese invasion that shaped the nation’s identity. It highlights the struggles and heroism of Filipinos who fought for independence and freedom. By understanding the past, readers can appreciate the country’s culture, traditions, and values. Ultimately, it helps students realize how history connects to the nation’s current challenges and future aspirations.",
-    "Noli Me Tangere": "Noli Me Tangere is a novel written by Dr. José Rizal that exposed the injustices and corruption under Spanish rule in the Philippines. The story follows Crisostomo Ibarra, a young Filipino who returns home after studying abroad, hoping to improve his country through education. However, he soon faces the cruelty of friars and officials who abuse their power. Through its characters, the novel reveals the suffering of Filipinos under colonial oppression. It inspired national consciousness and became a key factor in the fight for independence. Noli Me Tangere remains a timeless reminder of courage, patriotism, and the power of truth.",
-    "Splinters": "Splinters tells the story of two people shattered by their pasts, both struggling to piece their lives back together. When fate brings them together, they find comfort in their shared pain and unspoken understanding. As their friendship deepens, they begin to heal old wounds and rediscover hope. Yet, the fear of being hurt again keeps them from embracing love completely. The story beautifully captures how broken people can still find light in one another. In the end, Splinters reminds us that healing is not about becoming whole again—but learning to live with the cracks.",
-    "Night Shade": "Night Shade is a tale of forbidden love wrapped in mystery and danger. It follows two souls from opposing sides of a hidden war who are drawn to each other despite the risks. Their secret meetings blur the line between passion and peril. As secrets unravel, they realize that love could either destroy or save them. Every choice they make brings them closer to the truth and further from safety. Night Shade is a haunting romance that proves love can bloom even in the shadows.","Romance Rivalry": "Romance Rivalry follows two best friends who find themselves in love with the same person. What begins as innocent admiration turns into a silent battle of hearts. Jealousy, confusion, and loyalty tear at their friendship as emotions grow stronger. Each must decide what matters more—love or the bond they’ve built for years. The story captures the bittersweet pain of unspoken feelings and difficult choices. In the end, it teaches that sometimes, the heart wins—but friendship endures.",
-    "Queen of Carrion": "Queen of Carrion is a dark fantasy about a fallen princess who rises from the ruins of her kingdom. Betrayed by those she trusted, she swears vengeance against the forces that destroyed her world. Along her journey, she faces monsters born from decay and corruption. Through pain and blood, she reclaims her power and destiny. The story weaves themes of survival, strength, and the price of reclaiming a throne. Queen of Carrion is a haunting saga of rebirth in a world ruled by death.",
-    "The Lottery": "The Lottery by Shirley Jackson is a chilling story about tradition, conformity, and human cruelty. In a small, peaceful village, residents gather annually for a mysterious lottery. The event begins cheerfully but slowly reveals its horrifying purpose. What appears to be a harmless ritual ends in shocking violence. The story forces readers to question blind obedience to outdated customs. Its quiet terror lingers long after the final line, exposing the darkness that can hide in ordinary people.",
-    "SwordHeart": "SwordHeart follows a reluctant hero who inherits a cursed sword bound to a warrior’s spirit. Together, they embark on a dangerous journey filled with humor, heart, and unexpected friendship. As they fight mythical beasts and uncover ancient secrets, their bond deepens beyond duty. The story blends fantasy adventure with emotional growth and self-discovery. Every swing of the sword brings them closer to freedom—and understanding their purpose. In the end, SwordHeart reminds us that courage and companionship can break even the strongest curses.",
-    "Tear my World": "Tear My World is a science fiction story set in a future where humanity’s obsession with technology has torn the planet apart. A brilliant young scientist tries to undo the damage caused by her own invention. As she fights against corrupt leaders and her guilty conscience, she discovers that saving the world means facing her deepest fears. The story explores the balance between progress and destruction. Each choice she makes could either restore the Earth or destroy it forever. Tear My World is a gripping reminder that redemption often comes at the cost of sacrifice.",
-    "True Beauty": "True Beauty tells the story of a young woman who struggles with her self-image in a world obsessed with perfection. Through makeup and social media, she hides her insecurities behind a flawless façade. But when she meets someone who sees her true self, her perspective begins to change. The story explores the pressures of beauty standards and the journey toward self-acceptance. It shows that real confidence comes from within, not from appearances. True Beauty reminds us that the most beautiful thing we can be is authentic.",
-    "My Fair Position": "My Fair Position blends romance and fantasy in a world where power and status define destiny. A humble woman rises to an unexpected position in the royal court, where ambition and love collide. Torn between her duties and her growing feelings for a noble prince, she must choose between heart and honor. Intrigue, betrayal, and passion test her courage as she learns her true worth. The story celebrates determination and the strength to defy expectations. In the end, love becomes both her greatest challenge and triumph.",
-    "Underworld": "Underworld follows a fallen warrior trapped in a realm between life and death. Haunted by his past, he seeks redemption by fighting the demons that dwell within and around him. Along the way, he meets lost souls who teach him about forgiveness and fate. The journey through darkness becomes a test of spirit and sacrifice. With each battle, he moves closer to reclaiming his humanity. Underworld is a story of loss, redemption, and the eternal struggle to find peace in the afterlife.",
-    "Doom Breaker": "Doom Breaker tells the story of a warrior cursed by the gods and doomed to repeat his tragic fate. When given a second chance, he vows to rewrite his destiny and protect those he once failed. Each battle pushes him closer to freedom—but also to destruction. Along the way, he learns that strength without compassion leads only to ruin. The story mixes action, mythology, and redemption in an epic struggle against fate. Doom Breaker proves that even in darkness, hope can break the cycle of doom.",
-    "His Into Her": "His Into Her is a high school romance filled with humor, rivalry, and heartfelt moments. It follows two students who constantly clash but can’t deny their growing attraction. Through misunderstandings, jealousy, and friendship, they discover the meaning of love and acceptance. The story captures the excitement and awkwardness of young romance. It reminds readers that even opposites can find common ground. His Into Her is a fun, emotional journey through the highs and lows of teenage love.",
-    "Echoes of Tomorrow": "Echoes of Tomorrow is a sci-fi story about time, memory, and the choices that define us. A scientist creates a device that allows her to travel back and fix her greatest mistakes. But each change in the past reshapes her present in unpredictable ways. As timelines collapse, she must decide between saving the world or saving the one she loves. The story explores destiny, sacrifice, and the fragile nature of time. Echoes of Tomorrow reminds us that some futures are meant to be lived, not rewritten.",
-    "Silent Fate": "Silent Fate tells the story of a novelist whose written words begin to alter reality. At first, he is fascinated by his newfound power to shape the world. But as his stories spiral out of control, fiction and reality start to merge. Characters he created begin acting on their own, rewriting his life. The story explores creativity, guilt, and the burden of control. Silent Fate is a haunting tale about the dangers of imagination—and the silence that follows when stories go too far."
-    
+    // Tiyakin na ang stories object ay kumpleto dito (tulad ng nasa file mo)
+    "English Academic": "English Academic focuses on building students’ skills in reading, writing, and critical thinking...",
+    "Philippine History": "Philippine History explores the country’s journey from pre-colonial times to the present day...",
+    "Noli Me Tangere": "Noli Me Tangere is a novel written by Dr. José Rizal that exposed the injustices and corruption under Spanish rule...",
+    "Splinters": "Splinters tells the story of two people shattered by their pasts, both struggling to piece their lives back together...",
+    "Night Shade": "Night Shade is a tale of forbidden love wrapped in mystery and danger...",
+    "Romance Rivalry": "Romance Rivalry follows two best friends who find themselves in love with the same person...",
+    "Queen of Carrion": "Queen of Carrion is a dark fantasy about a fallen princess who rises from the ruins of her kingdom...",
+    "The Lottery": "The Lottery by Shirley Jackson is a chilling story about tradition, conformity, and human cruelty...",
+    "SwordHeart": "SwordHeart follows a reluctant hero who inherits a cursed sword bound to a warrior’s spirit...",
+    "Tear my World": "Tear My World is a science fiction story set in a future where humanity’s obsession with technology has torn the planet apart...",
+    "True Beauty": "True Beauty tells the story of a young woman who struggles with her self-image in a world obsessed with perfection...",
+    "My Fair Position": "My Fair Position blends romance and fantasy in a world where power and status define destiny...",
+    "Underworld": "Underworld follows a fallen warrior trapped in a realm between life and death...",
+    "Doom Breaker": "Doom Breaker tells the story of a warrior cursed by the gods and doomed to repeat his tragic fate...",
+    "His Into Her": "His Into Her is a high school romance filled with humor, rivalry, and heartfelt moments...",
+    "Echoes of Tomorrow": "Echoes of Tomorrow is a sci-fi story about time, memory, and the choices that define us...",
+    "Silent Fate": "Silent Fate tells the story of a novelist whose written words begin to alter reality..."
   };
 
   const modal = document.getElementById("storyModal");
@@ -177,19 +177,11 @@ document.addEventListener("DOMContentLoaded", () => {
   closeModal.addEventListener("click", closeStory);
   modal.addEventListener("click", (e) => { if (e.target === modal) closeStory(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStory(); });
-
-  if (readButtons.length === 0) {
-    console.warn("No .read-btn buttons found. Make sure buttons have class=\"read-btn\".");
-  } else {
-    console.log("Read buttons count:", readButtons.length);
-  }
 });
 </script>
 
-<!-- Categories -->
-<section class="categories">
+<section class="categories" id="dynamicCategoriesContainer"> 
   <h2>📖 Explore by Categories</h2>
-
   <div class="category">
     <h3>Academic</h3>
     <div class="book-card">
@@ -199,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
         <p><strong>English Academic</strong></p>
         <small>A guide to mastering academic writing, grammar, and communication skills.</small>
 
-        <!-- ⭐ Star Rating -->
         <div class="stars">
           <span>★</span>
           <span>★</span>
@@ -208,7 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <span>☆</span>
         </div>
 
-        <!-- 💾 Save Button -->
         <button class="save-btn">💾 Save to Library</button>
         <button class="read-btn" data-title="English Academic">📖 Read Book</button>
 
@@ -481,7 +471,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
  
 
-<!-- Latest Releases -->
 <section id="latest">
   <h2> Latest Releases</h2>
 
@@ -530,7 +519,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
 
-    <!-- 🆕 Add more books below if you want -->
     <div class="book">
       <img src="ASSETS/book6.jpg" alt="Echoes of Tomorrow">
       <div class="book-info">
@@ -598,7 +586,6 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
 
 
-  <!-- Footer -->
   <footer id="contact">
     <p>© 2025 Digital Library Hub | All Rights Reserved</p>
   </footer>
@@ -627,10 +614,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   </script>
 
-
-
+  <div id="loginModal" class="login-modal">
+    <div class="login-content">
+        <span id="closeLogin" class="close">&times;</span>
+        <h2>Access Your Library</h2>
+        <form id="authForm">
+            <input type="email" id="authEmail" placeholder="Email Address" required><br>
+            <input type="password" id="authPassword" placeholder="Password" required><br>
+            <button type="submit" id="loginButton">Login</button>
+            <button type="button" id="registerButton" style="background: #e67e22; margin-top: 5px;">Register</button>
+        </form>
+    </div>
+</div>
 
 
 </body>
 </html>
-

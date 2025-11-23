@@ -70,10 +70,9 @@ export async function registerUser(email, password) {
  * Log in a user with email and password.
  * @param {import('firebase/auth').Auth} authInstance The Firebase Auth instance.
  */
-export async function loginUser(authInstance, email, password) { 
+export async function loginUser(email, password) { 
   try {
-    // Tiyakin na ang authInstance ay ginagamit
-    const userCredential = await signInWithEmailAndPassword(authInstance, email, password); 
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     alert("👋 Welcome back! Login successful.");
     return userCredential;
   } catch (error) {
@@ -114,3 +113,40 @@ export async function getBooksFromDB() {
 
 // Export auth to check login state later
 export { auth };
+
+// Sa loob ng functions/index.js:
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+// Initialize the Admin SDK once
+admin.initializeApp();
+const db = admin.firestore();
+
+// Ito ang Cloud Function na tatawagin ng iyong website
+exports.subscribeToNewsletter = functions.https.onRequest(async (req, res) => {
+    // 1. Tiyakin na POST method ang ginamit
+    if (req.method !== 'POST') {
+        return res.status(405).send('Method Not Allowed');
+    }
+
+    const email = req.body.email;
+
+    if (!email) {
+        return res.status(400).send('Email is required.');
+    }
+
+    try {
+        // 2. I-save ang email sa isang Firestore Collection (e.g., 'subscribers')
+        await db.collection('subscribers').add({
+            email: email,
+            subscribedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // 3. Magbigay ng tagumpay na sagot pabalik sa frontend
+        res.status(200).send({ message: "Subscription successful!" });
+    } catch (error) {
+        console.error("Error saving subscription:", error);
+        res.status(500).send({ error: "Internal Server Error" });
+    }
+});

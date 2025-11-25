@@ -3,68 +3,332 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Authors</title>
-  <!-- Link external CSS -->
+  <title>Authors | Digital Library Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <script type="module" src="script.js"></script>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <h1>📚 Digital Library </h1>
-    <nav class="navbar">
-      <a href= "index.html" data-section="latest" >Latest</a>
-      <a href= "Featured.html" data-section="featured" >Featured</a>
-      <a href= "Event.html" data-section="events" >Events</a>
-      <a href= "Authors.html" data-section="authors" >Authors</a>
-      <a href="library.html" data-section="library">Library</a>
-    </nav>
-    <div class="icons">
-      <span id="searchToggle">🔍</span>
-      <span>🛒</span>
-      <span>👤</span>
-      <span id="modeToggle">🌙</span>
+    <div class="header-container">
+      <div class="header-brand">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <div class="logo-text">
+            <h1>Digital Library Hub</h1>
+            <span class="logo-subtitle">Your Reading Companion</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-link" data-section="home">
+            <i class="fas fa-home"></i> <span>Home</span>
+          </a>
+          <a href="Featured.html" class="nav-link" data-section="featured">
+            <i class="fas fa-star"></i> <span>Featured</span>
+          </a>
+          <a href="Event.html" class="nav-link" data-section="events">
+            <i class="fas fa-calendar-alt"></i> <span>Events</span>
+          </a>
+          <a href="Authors.html" class="nav-link active" data-section="authors">
+            <i class="fas fa-user-edit"></i> <span>Authors</span>
+          </a>
+          <a href="Library.html" class="nav-link" data-section="library">
+            <i class="fas fa-book-open"></i> <span>My Library</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <div class="action-icons">
+          <button class="icon-btn search-toggle" id="searchToggle"><i class="fas fa-search"></i></button>
+          <div class="user-menu">
+            <button class="icon-btn user-toggle" id="accountToggle"><i class="fas fa-user"></i></button>
+          </div>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-content">
+        <a href="index.html" class="mobile-nav-link">Home</a>
+        <a href="Authors.html" class="mobile-nav-link active">Authors</a>
+        </div>
     </div>
   </header>
 
-  <!-- Authors Section -->
-  <section id="authors">
-    <h2>Meet Our Authors</h2>
-    <div class="authors-container">
+  <section class="authors-section">
+    <div class="container">
+      <h2>✍️ Meet Our Authors</h2>
+      <p class="section-subtitle">Discover the brilliant minds behind your favorite books</p>
+
+      <div class="authors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        
+        <div class="author-card">
+          <div class="author-image">
+            <img src="ASSETS/author1.jpg" alt="J.K. Rowling" onerror="this.src='ASSETS/default.jpg'">
+            <div class="author-badge">Bestselling</div>
+          </div>
+          <div class="author-details">
+            <h3>J.K. Rowling</h3>
+            <p class="author-bio">Author of the world-famous Harry Potter series.</p>
+            <div class="author-stats">
+              <span class="books-count">📚 15+ Books</span>
+              <span class="rating">★★★★★</span>
+            </div>
+            <div class="famous-works">
+              <strong>Famous Works:</strong> Harry Potter Series, The Casual Vacancy
+            </div>
+          </div>
+        </div>
+
+        <div class="author-card">
+          <div class="author-image">
+            <img src="ASSETS/author2.jpg" alt="George R.R. Martin" onerror="this.src='ASSETS/default.jpg'">
+            <div class="author-badge">Epic Fantasy</div>
+          </div>
+          <div class="author-details">
+            <h3>George R.R. Martin</h3>
+            <p class="author-bio">Known for his epic fantasy series *A Song of Ice and Fire*.</p>
+            <div class="author-stats">
+              <span class="books-count">📚 25+ Books</span>
+              <span class="rating">★★★★★</span>
+            </div>
+            <div class="famous-works">
+              <strong>Famous Works:</strong> A Song of Ice and Fire, Fire & Blood
+            </div>
+          </div>
+        </div>
+
+        <div class="author-card">
+          <div class="author-image">
+            <img src="ASSETS/author3.jpg" alt="Jane Austen" onerror="this.src='ASSETS/default.jpg'">
+            <div class="author-badge">Classic Literature</div>
+          </div>
+          <div class="author-details">
+            <h3>Jane Austen</h3>
+            <p class="author-bio">One of the most beloved authors of English literature.</p>
+            <div class="author-stats">
+              <span class="books-count">📚 6 Major Novels</span>
+              <span class="rating">★★★★★</span>
+            </div>
+            <div class="famous-works">
+              <strong>Famous Works:</strong> Pride and Prejudice, Sense and Sensibility
+            </div>
+          </div>
+        </div>
+
+        <div class="author-card">
+          <div class="author-image">
+            <img src="ASSETS/author4.jpg" alt="Paulo Coelho" onerror="this.src='ASSETS/default.jpg'">
+            <div class="author-badge">Inspirational</div>
+          </div>
+          <div class="author-details">
+            <h3>Paulo Coelho</h3>
+            <p class="author-bio">A Brazilian novelist famous for his inspirational works.</p>
+            <div class="author-stats">
+              <span class="books-count">📚 30+ Books</span>
+              <span class="rating">★★★★☆</span>
+            </div>
+            <div class="famous-works">
+              <strong>Famous Works:</strong> The Alchemist, Brida, Eleven Minutes
+            </div>
+          </div>
+        </div>
+
+      </div> </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+
+  <footer id="contact">
+
+    <div class="footer-content">
+
+      <div class="footer-logo">
+
+        <h3>📚 Digital Library Hub</h3>
+
+        <p>Your gateway to endless reading adventures</p>
+
+      </div>
+
       
-      <!-- Author 1 -->
-      <div class="author-card">
-        <img src="ASSETS/author1.jpg" alt="Author 1">
-        <h3>J.K. Rowling</h3>
-        <p>Author of the world-famous Harry Potter series, her works have inspired millions of readers worldwide.</p>
-        <div class="works"><b>Famous Works:</b> Harry Potter Series, The Casual Vacancy</div>
-      </div>
 
-      <!-- Author 2 -->
-      <div class="author-card">
-        <img src="ASSETS/author2.jpg" alt="Author 2">
-        <h3>George R.R. Martin</h3>
-        <p>Known for his epic fantasy series *A Song of Ice and Fire*, adapted into the TV series Game of Thrones.</p>
-        <div class="works"><b>Famous Works:</b> A Song of Ice and Fire, Fire & Blood</div>
-      </div>
+      <div class="footer-links">
 
-      <!-- Author 3 -->
-      <div class="author-card">
-        <img src="ASSETS/author3.jpg" alt="Author 3">
-        <h3>Jane Austen</h3>
-        <p>One of the most beloved authors of English literature, known for her timeless romance novels.</p>
-        <div class="works"><b>Famous Works:</b> Pride and Prejudice, Sense and Sensibility</div>
-      </div>
+        <div class="footer-column">
 
-      <!-- Author 4 -->
-      <div class="author-card">
-        <img src="ASSETS/author4.jpg" alt="Author 4">
-        <h3>Paulo Coelho</h3>
-        <p>A Brazilian novelist famous for his inspirational works, especially *The Alchemist*.</p>
-        <div class="works"><b>Famous Works:</b> The Alchemist, Brida, Eleven Minutes</div>
+          <h4>Explore</h4>
+
+          <ul>
+
+            <li><a href="index.html">Home</a></li>
+
+            <li><a href="Featured.html">Featured Books</a></li>
+
+            <li><a href="Library.html">My Library</a></li>
+
+            <li><a href="Event.html">Events</a></li>
+
+          </ul>
+
+        </div>
+
+        
+
+        <div class="footer-column">
+
+          <h4>Support</h4>
+
+          <ul>
+
+            <li><a href="#">Help Center</a></li>
+
+            <li><a href="#">Contact Us
+
+            <li><a href="#">Terms of Service</a></li>
+
+          </ul>
+
+        </div>
+
+        
+
+        <div class="footer-column">
+
+          <h4>Connect With Us</h4>
+
+          <div class="footer-socials">
+
+            <a href="#" class="social-link facebook" aria-label="Facebook">
+
+              <i class="fab fa-facebook-f"></i>
+
+            </a>
+
+            <a href="#" class="social-link twitter" aria-label="Twitter">
+
+              <i class="fab fa-twitter"></i>
+
+            </a>
+
+            <a href="#" class="social-link instagram" aria-label="Instagram">
+
+              <i class="fab fa-instagram"></i>
+
+            </a>
+
+            <a href="#" class="social-link youtube" aria-label="YouTube">
+
+              <i class="fab fa-youtube"></i>
+
+            </a>
+
+          </div>
+
+          <div class="newsletter-signup">
+
+            <p>Stay updated with our latest books</p>
+
+            <form class="footer-newsletter">
+
+              <input type="email" placeholder="Your email address" required>
+
+              <button type="submit">Subscribe</button>
+
+            </form>
+
+          </div>
+
+        </div>
+
       </div>
 
     </div>
-  </section>
+
+    
+
+    <div class="footer-bottom">
+
+      <div class="footer-bottom-content">
+
+        <p>&copy; 2025 Digital Library Hub. All Rights Reserved.</p>
+
+        <div class="footer-legal">
+
+          <a href="#">Privacy</a>
+
+          <span class="separator">|</span>
+
+          <a href="#">Terms</a>
+
+          <span class="separator">|</span>
+
+          <a href="#">Cookies</a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+
+
+  <!-- Login Modal -->
+
+  <div id="loginModal" class="login-modal">
+
+    <div class="login-content">
+
+      <span id="closeLogin" class="close">&times;</span>
+
+      <h2>Access Your Library</h2>
+
+      <form id="authForm">
+
+        <div class="input-group">
+
+          <i class="fas fa-envelope"></i>
+
+          <input type="email" id="authEmail" placeholder="Email Address" required>
+
+        </div>
+
+        <div class="input-group">
+
+          <i class="fas fa-lock"></i>
+
+          <input type="password" id="authPassword" placeholder="Password" required>
+
+        </div>
+
+        <div class="form-options">
+
+          <label class="remember-me">
+
+            <input type="checkbox"> Remember me
+
+          </label>
+
+          <a href="#" class="forgot-password">Forgot Password?</a>
+
+        </div>
+
+        <button type="submit" id="loginButton" class="btn-login">Login</button>
+
+        <button type="button" id="registerButton" class="btn-register">Create New Account</button>
+
+      </form>
+
+    </div>
+
+  </div>
+
 </body>
 </html>
-

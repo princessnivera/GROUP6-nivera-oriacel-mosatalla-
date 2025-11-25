@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://apis.google.com; connect-src 'self' https://*.supabase.co https://*.firebaseio.com https://*.googleapis.com https://www.googleadservices.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;">
   <title>Digital Library Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="firebase.js"></script>
   <script type="module" src="script.js"></script>
 </head>
@@ -303,294 +305,10 @@
   </div>
 </section>
 
-
 <section class="categories" id="dynamicCategoriesContainer"> 
-  <h2>📖 Explore by Categories</h2>
-  <div class="category">
-    <h3>Academic</h3>
-    <div class="book-card">
-    <div class="books">
-      <div class="book">
-        <img src="ASSETS/acads4.jpg" alt="English Academic">
-        <p><strong>English Academic</strong></p>
-        <small>A guide to mastering academic writing, grammar, and communication skills.</small>
-
-        <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-        <button class="read-btn" data-title="English Academic">📖 Read Book</button>
-
-      </div>
-
-      <div class="book">
-        <img src="ASSETS/acad1.jpg" alt="Philippine History">
-        <p><strong>Philippine History</strong></p>
-        <small>Explores the Philippines’ journey from pre-colonial times to the modern era.</small>
-
-        <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Philippine History">📖 Read Book</button>
-
-      </div>
-
-      <div class="book">
-        <img src="ASSETS/acad3.jpg" alt="Noli Me Tangere">
-        <p><strong>Noli Me Tangere</strong></p>
-        <small>José Rizal’s timeless novel highlighting colonial injustices and reforms.</small>
-
-        <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Noli Me Tangere">📖 Read Book</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-  <div class="category">
-    <h3>Entertainment (Romance)</h3>
-    <div class="books">
-      <div class="book">
-        <img src="ASSETS/romance1.jpg">
-        <p><strong>Splinters</strong></p>
-        <small>A tale of two souls healing each other after heartbreak.</small>
-
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Splinters">📖 Read Book</button>
-      </div>
-      
-      <div class="book">
-        <img src="ASSETS/romance2.jpg">
-        <p><strong>Night Shade</strong></p>
-        <small>A forbidden romance set against the backdrop of mystery and secrets.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Night Shade">📖 Read Book</button>
-      </div>
-  
-      <div class="book">
-        <img src="ASSETS/romance3.jpg">
-        <p><strong>Romance Rivalry</strong></p>
-        <small>When love turns competitive, who truly wins the heart?</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-        <button class="read-btn" data-title="Romance Rivalry">📖 Read Book</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="category">
-    <h3>Entertainment (Fantasy)</h3>
-    <div class="books">
-      <div class="book">
-        <img src="ASSETS/fantacy 1.jpg">
-        <p><strong>Queen of Carrion</strong></p>
-        <small>A fantasy saga about a queen rising from ashes to reclaim her throne.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Queen of Carrion">📖 Read Book</button>
-      </div>
-  
-      <div class="book">
-        <img src="ASSETS/fantacy2.jpg">
-        <p><strong>The Lottery</strong></p>
-        <small>A chilling fantasy tale where fate is decided by chance.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="The Lottery">📖 Read Book</button>
-      </div>
-      <div class="book">
-        <img src="ASSETS/fantacy4.jpg">
-        <p><strong>SwordHeart</strong></p>
-        <small>Adventure, magic, and a talking sword that changes destiny.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-        <button class="read-btn" data-title="SwordHeart">📖 Read Book</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="category">
-    <h3>Sci-Fi</h3>
-    <div class="books">
-      <div class="book">
-        <img src="ASSETS/fiction1.jpg">
-        <p><strong>Tear my World</strong></p>
-        <small>A scientist faces the collapse of parallel universes.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Tear my World">📖 Read Book</button>
-      </div>
-      <div class="book">
-        <img src="ASSETS/fiction2.jpg">
-        <p><strong>Alien Invasion</strong></p>
-        <small>Earth’s survival hinges on unlikely heroes resisting alien forces.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="Alien Invasion">📖 Read Book</button>
-      </div>
-      <div class="book">
-        <img src="ASSETS/fiction3.jpg">
-        <p><strong>Study in Scarlet</strong></p>
-        <small>A futuristic detective mystery unraveling coded conspiracies.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-        <button class="read-btn" data-title="Study in Scarlet">📖 Read Book</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="category">
-    <h3>Comics</h3>
-    <div class="books">
-      <div class="book">
-        <img src="ASSETS/comics2.jpg">
-        <p><strong>True Beauty</strong></p>
-        <small>A heartwarming comic about love, beauty, and self-confidence.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn" data-title="True Beauty">📖 Read Book</button>
-      </div>
-    
-      <div class="book">
-        <img src="ASSETS/comics3.jpg">
-        <p><strong>Spider Amazing</strong></p>
-        <small>Spider-Man’s adventures balancing hero life and personal struggles.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn">📖 Read Book</button>
-      </div>
-  
-      <div class="book">
-        <img src="ASSETS/comics5.jpg">
-        <p><strong>We’re Not Just Friends</strong></p>
-        <small>A comic about love blossoming from friendship.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn">📖 Read Book</button>
-      </div>
-    
-      <div class="book">
-        <img src="ASSETS/comics1.jpg">
-        <p><strong>Hooky</strong></p>
-        <small>A magical journey of siblings discovering their destiny.</small>
-         <div class="stars">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>☆</span>
-          <span>☆</span>
-        </div>
-
-        <button class="save-btn">💾 Save to Library</button>
-         <button class="read-btn">📖 Read Book</button>
-      </div>
-    </div>
+  <div style="text-align: center; padding: 50px;">
+    <i class="fas fa-circle-notch fa-spin" style="font-size: 2rem; color: #3a3a98;"></i>
+    <p>Loading Library...</p>
   </div>
 </section>
  
@@ -737,13 +455,32 @@
   </div>
 </footer>
 
-<!-- STORY MODAL (Fixed Class and IDs) -->
-<div id="storyModal" class="story-modal">
-    <div class="story-content">
-        <span id="closeModal" class="close-modal">&times;</span>
-        <h2 id="storyTitle">Book Title</h2>
-        <div style="height: 1px; background: #ddd; margin: 10px 0;"></div>
-        <p id="storyText" class="story-text" style="line-height: 1.6;">Story content...</p>
+<div id="storyModal" class="story-modal" aria-hidden="true">
+    <div class="reader-container" role="dialog" aria-modal="true">
+        
+        <div class="reader-header">
+            <h2 id="readerTitle">Book Title</h2>
+            <button id="closeModal" class="close-reader" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="reader-body">
+            <aside class="chapter-sidebar">
+                <h3>Chapters</h3>
+                <ul id="chapterList">
+                    </ul>
+            </aside>
+
+            <main class="chapter-content">
+                <h3 id="chapterTitleDisplay">Select a Chapter</h3>
+                <div id="storyText" class="text-scroll-area">
+                    </div>
+                
+                <div class="reader-nav">
+                    <button id="prevChapter" disabled>Previous</button>
+                    <button id="nextChapter">Next</button>
+                </div>
+            </main>
+        </div>
     </div>
 </div>
 

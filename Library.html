@@ -4,208 +4,309 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Library | Digital Library Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .library-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 40px;
-    }
-    .book-card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      padding: 15px;
-      text-align: center;
-      transition: transform 0.3s;
-    }
-    .book-card:hover { transform: scale(1.05); }
-    .book-card img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 10px;
-    }
-    .book-card h3 { margin: 10px 0 5px; color: #2c3e50; }
-    .book-card p { color: #555; font-size: 14px; }
-    .read-btn, .remove-btn {
-      background: #3a3a98;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      margin-top: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .read-btn:hover { background: #4a4ab8; }
-    .remove-btn {
-      background: #e74c3c;
-      margin-left: 10px;
-    }
-    .remove-btn:hover { background: #c0392b; }
-    .footer { text-align: center;
-       padding: 20px; 
-       background: #222; 
-       color: #fff; 
-    }
-  </style>
+  <script type="module" src="script.js"></script>
 </head>
 <body>
   <header>
-    <h1>📚 Your Saved Library</h1>
-    <nav class="navbar">
-      <a href="index.html">Home</a>
-      <a href="Featured.html">Featured</a>
-      <a href="Event.html">Events</a>
-      <a href="Authors.html">Authors</a>
-      <a href="Library.html" class="active">Library</a>
-    </nav>
+    <div class="header-container">
+      <div class="header-brand">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <div class="logo-text">
+            <h1>Digital Library Hub</h1>
+            <span class="logo-subtitle">Your Reading Companion</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="navbar">
+        <div class="nav-container">
+          <a href="index.html" class="nav-link" data-section="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+          </a>
+          <a href="Featured.html" class="nav-link" data-section="featured">
+            <i class="fas fa-star"></i>
+            <span>Featured</span>
+          </a>
+          <a href="Event.html" class="nav-link" data-section="events">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
+          </a>
+          <a href="Authors.html" class="nav-link" data-section="authors">
+            <i class="fas fa-user-edit"></i>
+            <span>Authors</span>
+          </a>
+          <a href="Library.html" class="nav-link active" data-section="library">
+            <i class="fas fa-book-open"></i>
+            <span>My Library</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <div class="search-container">
+          <form class="search-bar" id="headerSearchForm">
+            <div class="search-input-group">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" id="headerSearchInput" placeholder="Search books...">
+              <button type="submit" class="search-btn"><i class="fas fa-arrow-right"></i></button>
+            </div>
+          </form>
+        </div>
+
+        <div class="action-icons">
+          <button class="icon-btn search-toggle" id="searchToggle"><i class="fas fa-search"></i></button>
+          <div class="user-menu">
+            <button class="icon-btn user-toggle" id="accountToggle"><i class="fas fa-user"></i></button>
+            <div class="user-dropdown">
+               <div class="user-info"><i class="fas fa-user-circle"></i><span>Guest User</span></div>
+               <div class="dropdown-divider"></div>
+               <button class="dropdown-item logout-btn"><i class="fas fa-sign-out-alt"></i> Sign In</button>
+            </div>
+          </div>
+          <button class="icon-btn mode-toggle" id="modeToggle"><i class="fas fa-moon"></i></button>
+          <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-nav" id="mobileNav">
+      <div class="mobile-nav-content">
+        <a href="index.html" class="mobile-nav-link"><i class="fas fa-home"></i> Home</a>
+        <a href="Featured.html" class="mobile-nav-link"><i class="fas fa-star"></i> Featured</a>
+        <a href="Event.html" class="mobile-nav-link"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="Authors.html" class="mobile-nav-link"><i class="fas fa-user-edit"></i> Authors</a>
+        <a href="Library.html" class="mobile-nav-link active"><i class="fas fa-book-open"></i> My Library</a>
+        <div class="mobile-nav-actions">
+          <button class="mobile-mode-toggle"><i class="fas fa-moon"></i> Dark Mode</button>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <section class="library-container" id="savedBooksContainer"></section>
+  <section class="library-section">
+    <div class="container">
+      <div class="library-header">
+        <h2>Your Personal Library</h2>
+        <p class="library-subtitle">All your saved books in one place</p>
+        <div class="library-stats">
+          <span class="stat-item"><strong id="totalBooks">0</strong> Total Books</span>
+          <span class="stat-item"><strong id="readBooks">0</strong> Read</span>
+          <span class="stat-item"><strong id="unreadBooks">0</strong> Unread</span>
+        </div>
+      </div>
 
-  <footer class="footer">
-    <p>© 2025 Digital Library Hub | All Rights Reserved</p>
+      <div class="library-filters">
+        <button class="filter-btn active" data-filter="all">All Books</button>
+        <button class="filter-btn" data-filter="read">Read</button>
+        <button class="filter-btn" data-filter="unread">Unread</button>
+        <button class="filter-btn" data-filter="favorites">Favorites</button>
+      </div>
+
+      <div class="library-container" id="savedBooksContainer">
+        </div>
+
+      <div class="empty-library" id="emptyLibrary" style="display: none;">
+        <div class="empty-state">
+          <i class="fas fa-book-open fa-3x"></i>
+          <h3>Your library is empty</h3>
+          <p>Start building your collection by saving books from our catalog</p>
+          <a href="index.html" class="browse-btn">Browse Books</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <h3>📚 Digital Library Hub</h3>
+        <p>Your gateway to endless reading adventures</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Featured.html">Featured Books</a></li>
+            <li><a href="Library.html">My Library</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Connect</h4>
+            <div class="footer-socials">
+                <a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Digital Library Hub. All Rights Reserved.</p>
+    </div>
   </footer>
 
-  <script>
-    const container = document.getElementById("savedBooksContainer");
+  <div id="loginModal" class="login-modal">
+    <div class="login-content">
+      <span id="closeLogin" class="close">&times;</span>
+      <h2>Access Your Library</h2>
+      <form id="authForm">
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="authEmail" placeholder="Email Address" required>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="authPassword" placeholder="Password" required>
+        </div>
+        <button type="submit" id="loginButton" class="btn-login">Login</button>
+        <button type="button" id="registerButton" class="btn-register">Create New Account</button>
+      </form>
+    </div>
+  </div>
 
-    // Function to display saved books
+  <div id="storyModal" class="story-modal" aria-hidden="true">
+    <div class="reader-container" role="dialog" aria-modal="true">
+        <div class="reader-header">
+            <h2 id="readerTitle">Book Title</h2>
+            <button id="closeModal" class="close-reader" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="reader-body">
+            <aside class="chapter-sidebar">
+                <h3>Chapters</h3>
+                <ul id="chapterList">
+                    </ul>
+            </aside>
+
+            <main class="chapter-content">
+                <h3 id="chapterTitleDisplay">Select a Chapter</h3>
+                <div id="storyText" class="text-scroll-area">
+                    </div>
+                
+                <div class="reader-nav">
+                    <button id="prevChapter" disabled>Previous</button>
+                    <button id="nextChapter">Next</button>
+                </div>
+            </main>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    // Library Logic
+    const container = document.getElementById("savedBooksContainer");
+    const emptyLibrary = document.getElementById("emptyLibrary");
+    const totalBooksEl = document.getElementById("totalBooks");
+    const readBooksEl = document.getElementById("readBooks");
+    const unreadBooksEl = document.getElementById("unreadBooks");
+
     function renderLibrary() {
       const savedBooks = JSON.parse(localStorage.getItem("savedBooks")) || [];
+      
+      // Update stats
+      totalBooksEl.textContent = savedBooks.length;
+      const readBooks = savedBooks.filter(book => book.read).length;
+      readBooksEl.textContent = readBooks;
+      unreadBooksEl.textContent = savedBooks.length - readBooks;
+
       container.innerHTML = "";
 
       if (savedBooks.length === 0) {
-        container.innerHTML = "<p style='text-align:center;margin-top:40px;'>No saved books yet.</p>";
+        emptyLibrary.style.display = 'block';
+        container.style.display = 'none';
         return;
       }
 
-      savedBooks.forEach(book => {
+      emptyLibrary.style.display = 'none';
+      container.style.display = 'grid';
+
+      savedBooks.forEach((book, index) => {
         const div = document.createElement("div");
         div.classList.add("book-card");
         div.innerHTML = `
-          <img src="${book.img}" alt="${book.title}">
-          <h3>${book.title}</h3>
-          <p>by ${book.author}</p>
-          <button class="read-btn">📖 Read</button>
-          <button class="remove-btn">🗑 Remove</button>
+          <div class="book-cover">
+            <img src="${book.img}" alt="${book.title}" onerror="this.src='ASSETS/default.jpg'">
+            ${book.read ? '<div class="read-badge" style="position:absolute; top:10px; right:10px; background:#28a745; color:white; padding:4px 8px; border-radius:4px; font-size:12px;">Read</div>' : ''}
+          </div>
+          <div class="book-info">
+            <h3>${book.title}</h3>
+            <p class="author">by ${book.author}</p>
+            <div class="book-actions">
+              <button class="read-btn" data-title="${book.title}">📖 ${book.read ? 'Re-read' : 'Read'}</button>
+              <button class="remove-btn" data-index="${index}">🗑 Remove</button>
+            </div>
+          </div>
         `;
 
-        // 🗑 Remove button function
-        div.querySelector(".remove-btn").addEventListener("click", () => {
-          const updatedBooks = savedBooks.filter(b => b.title !== book.title);
+        // Remove functionality
+        div.querySelector(".remove-btn").addEventListener("click", (e) => {
+          e.stopPropagation(); // Stop bubbling
+          const updatedBooks = savedBooks.filter((b, i) => i !== index);
           localStorage.setItem("savedBooks", JSON.stringify(updatedBooks));
-          renderLibrary(); // Refresh list
+          renderLibrary();
+        });
+
+        // ✅ FIXED READ BUTTON
+        // We do NOT call renderLibrary() here because it destroys the DOM element
+        // before the 'click' event can bubble up to script.js (which opens the modal).
+        const readBtn = div.querySelector(".read-btn");
+        readBtn.addEventListener("click", () => {
+            // 1. Update status silently in background
+            savedBooks[index].read = true;
+            localStorage.setItem("savedBooks", JSON.stringify(savedBooks));
+            
+            // 2. Update UI manually for this button only
+            readBtn.innerHTML = "📖 Re-read";
+            
+            // 3. Update stats manually
+            readBooksEl.textContent = parseInt(readBooksEl.textContent) + 1;
+            
+            // 4. Let the event bubble up to script.js! 
+            // script.js listens for .read-btn clicks globally and will open the modal.
         });
 
         container.appendChild(div);
       });
     }
 
-    // First load
+    // Initial Load
     renderLibrary();
 
-    // 🔄 Auto-refresh when localStorage changes
+    // Listen for storage changes (if opened in another tab)
     window.addEventListener("storage", (event) => {
-      if (event.key === "savedBooks") {
-        renderLibrary();
-      }
+      if (event.key === "savedBooks") renderLibrary();
+    });
+
+    // Simple Filter Logic
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        // Simple visibility toggle
+        const cards = document.querySelectorAll('.book-card');
+        const books = JSON.parse(localStorage.getItem("savedBooks")) || [];
+        
+        cards.forEach((card, index) => {
+            const book = books[index];
+            if (filter === 'all') card.style.display = 'block';
+            else if (filter === 'read' && book.read) card.style.display = 'block';
+            else if (filter === 'unread' && !book.read) card.style.display = 'block';
+            else card.style.display = 'none';
+        });
+      });
     });
   </script>
-
-  <!-- ===== Story Modal (paste this before </body>) ===== -->
-<div id="storyModal" class="story-modal" aria-hidden="true">
-  <div class="story-content" role="dialog" aria-modal="true">
-    <button id="closeModal" class="close-modal" aria-label="Close story">&times;</button>
-    <h2 id="storyTitle">Title</h2>
-    <div id="storyText" class="story-text"></div>
-  </div>
-</div>
-
-<style>
-.story-modal { display: none; position: fixed; z-index: 9999; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding: 20px; }
-.story-modal.show { display: flex; }
-.story-content { background: #fff; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto; border-radius: 12px; padding: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.3); position: relative; }
-.close-modal { position: absolute; right: 14px; top: 10px; border: none; background: transparent; font-size: 26px; cursor: pointer; }
-.story-text { white-space: pre-line; line-height: 1.6; color: #333; }
-.story-content h2 { margin-top: 0; color: #2b2b7a; }
-</style>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const stories = {
-    "English Academic": "English Academic focuses on building students’ skills in reading, writing, and critical thinking. It teaches how to construct well-organized essays, use appropriate grammar, and express ideas clearly. Students explore various forms of literature, academic writing, and speech.  \n\n Through research and discussions, they learn how to analyze information effectively. The subject promotes intellectual growth and clarity in communication.\n\n Overall, it prepares learners to write and speak confidently in academic and real-world settings.",
-    "Philippine History": "Philippine History explores the country’s journey from pre-colonial times to the present day. It discusses how early Filipino societies lived, traded, and governed themselves before the arrival of foreign powers. The book also narrates the Spanish colonization, American occupation, and Japanese invasion that shaped the nation’s identity. It highlights the struggles and heroism of Filipinos who fought for independence and freedom. By understanding the past, readers can appreciate the country’s culture, traditions, and values. Ultimately, it helps students realize how history connects to the nation’s current challenges and future aspirations.",
-    "Noli Me Tangere": "Noli Me Tangere is a novel written by Dr. José Rizal that exposed the injustices and corruption under Spanish rule in the Philippines. The story follows Crisostomo Ibarra, a young Filipino who returns home after studying abroad, hoping to improve his country through education. However, he soon faces the cruelty of friars and officials who abuse their power. Through its characters, the novel reveals the suffering of Filipinos under colonial oppression. It inspired national consciousness and became a key factor in the fight for independence. Noli Me Tangere remains a timeless reminder of courage, patriotism, and the power of truth.",
-    "Splinters": "Splinters tells the story of two people shattered by their pasts, both struggling to piece their lives back together. When fate brings them together, they find comfort in their shared pain and unspoken understanding. As their friendship deepens, they begin to heal old wounds and rediscover hope. Yet, the fear of being hurt again keeps them from embracing love completely. The story beautifully captures how broken people can still find light in one another. In the end, Splinters reminds us that healing is not about becoming whole again—but learning to live with the cracks.",
-    "Night Shade": "Night Shade is a tale of forbidden love wrapped in mystery and danger. It follows two souls from opposing sides of a hidden war who are drawn to each other despite the risks. Their secret meetings blur the line between passion and peril. As secrets unravel, they realize that love could either destroy or save them. Every choice they make brings them closer to the truth and further from safety. Night Shade is a haunting romance that proves love can bloom even in the shadows.","Romance Rivalry": "Romance Rivalry follows two best friends who find themselves in love with the same person. What begins as innocent admiration turns into a silent battle of hearts. Jealousy, confusion, and loyalty tear at their friendship as emotions grow stronger. Each must decide what matters more—love or the bond they’ve built for years. The story captures the bittersweet pain of unspoken feelings and difficult choices. In the end, it teaches that sometimes, the heart wins—but friendship endures.",
-    "Queen of Carrion": "Queen of Carrion is a dark fantasy about a fallen princess who rises from the ruins of her kingdom. Betrayed by those she trusted, she swears vengeance against the forces that destroyed her world. Along her journey, she faces monsters born from decay and corruption. Through pain and blood, she reclaims her power and destiny. The story weaves themes of survival, strength, and the price of reclaiming a throne. Queen of Carrion is a haunting saga of rebirth in a world ruled by death.",
-    "The Lottery": "The Lottery by Shirley Jackson is a chilling story about tradition, conformity, and human cruelty. In a small, peaceful village, residents gather annually for a mysterious lottery. The event begins cheerfully but slowly reveals its horrifying purpose. What appears to be a harmless ritual ends in shocking violence. The story forces readers to question blind obedience to outdated customs. Its quiet terror lingers long after the final line, exposing the darkness that can hide in ordinary people.",
-    "SwordHeart": "SwordHeart follows a reluctant hero who inherits a cursed sword bound to a warrior’s spirit. Together, they embark on a dangerous journey filled with humor, heart, and unexpected friendship. As they fight mythical beasts and uncover ancient secrets, their bond deepens beyond duty. The story blends fantasy adventure with emotional growth and self-discovery. Every swing of the sword brings them closer to freedom—and understanding their purpose. In the end, SwordHeart reminds us that courage and companionship can break even the strongest curses.",
-    "Tear my World": "Tear My World is a science fiction story set in a future where humanity’s obsession with technology has torn the planet apart. A brilliant young scientist tries to undo the damage caused by her own invention. As she fights against corrupt leaders and her guilty conscience, she discovers that saving the world means facing her deepest fears. The story explores the balance between progress and destruction. Each choice she makes could either restore the Earth or destroy it forever. Tear My World is a gripping reminder that redemption often comes at the cost of sacrifice.",
-    "True Beauty": "True Beauty tells the story of a young woman who struggles with her self-image in a world obsessed with perfection. Through makeup and social media, she hides her insecurities behind a flawless façade. But when she meets someone who sees her true self, her perspective begins to change. The story explores the pressures of beauty standards and the journey toward self-acceptance. It shows that real confidence comes from within, not from appearances. True Beauty reminds us that the most beautiful thing we can be is authentic.",
-    "My Fair Position": "My Fair Position blends romance and fantasy in a world where power and status define destiny. A humble woman rises to an unexpected position in the royal court, where ambition and love collide. Torn between her duties and her growing feelings for a noble prince, she must choose between heart and honor. Intrigue, betrayal, and passion test her courage as she learns her true worth. The story celebrates determination and the strength to defy expectations. In the end, love becomes both her greatest challenge and triumph.",
-    "Underworld": "Underworld follows a fallen warrior trapped in a realm between life and death. Haunted by his past, he seeks redemption by fighting the demons that dwell within and around him. Along the way, he meets lost souls who teach him about forgiveness and fate. The journey through darkness becomes a test of spirit and sacrifice. With each battle, he moves closer to reclaiming his humanity. Underworld is a story of loss, redemption, and the eternal struggle to find peace in the afterlife.",
-    "Doom Breaker": "Doom Breaker tells the story of a warrior cursed by the gods and doomed to repeat his tragic fate. When given a second chance, he vows to rewrite his destiny and protect those he once failed. Each battle pushes him closer to freedom—but also to destruction. Along the way, he learns that strength without compassion leads only to ruin. The story mixes action, mythology, and redemption in an epic struggle against fate. Doom Breaker proves that even in darkness, hope can break the cycle of doom.",
-    "His Into Her": "His Into Her is a high school romance filled with humor, rivalry, and heartfelt moments. It follows two students who constantly clash but can’t deny their growing attraction. Through misunderstandings, jealousy, and friendship, they discover the meaning of love and acceptance. The story captures the excitement and awkwardness of young romance. It reminds readers that even opposites can find common ground. His Into Her is a fun, emotional journey through the highs and lows of teenage love.",
-    "Echoes of Tomorrow": "Echoes of Tomorrow is a sci-fi story about time, memory, and the choices that define us. A scientist creates a device that allows her to travel back and fix her greatest mistakes. But each change in the past reshapes her present in unpredictable ways. As timelines collapse, she must decide between saving the world or saving the one she loves. The story explores destiny, sacrifice, and the fragile nature of time. Echoes of Tomorrow reminds us that some futures are meant to be lived, not rewritten.",
-    "Silent Fate": "Silent Fate tells the story of a novelist whose written words begin to alter reality. At first, he is fascinated by his newfound power to shape the world. But as his stories spiral out of control, fiction and reality start to merge. Characters he created begin acting on their own, rewriting his life. The story explores creativity, guilt, and the burden of control. Silent Fate is a haunting tale about the dangers of imagination—and the silence that follows when stories go too far."
-    
-
-    //  add more keys here; key must match the visible title on the page
-  };
-
-  const modal = document.getElementById("storyModal");
-  const storyTitle = document.getElementById("storyTitle");
-  const storyText = document.getElementById("storyText");
-  const closeModal = document.getElementById("closeModal");
-
-  function extractTitleFromCard(card) {
-    if (!card) return null;
-    const selectors = ["h3", "h4", "h2", "strong", "p > strong", ".title"];
-    for (const sel of selectors) {
-      const el = card.querySelector(sel);
-      if (el && el.textContent.trim()) return el.textContent.trim();
-    }
-    const fallback = card.querySelector(".book-info h3");
-    if (fallback) return fallback.textContent.trim();
-    return null;
-  }
-
-  const readButtons = Array.from(document.querySelectorAll(".read-btn, button.read-btn"));
-  readButtons.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const card = btn.closest(".book, .book-card, .book-info, .book") || btn.parentElement;
-      const title = extractTitleFromCard(card) || btn.getAttribute("data-title") || "Untitled Book";
-      const content = stories[title] || "Sorry — this story is not yet available. Add it to the 'stories' object in the script.";
-      storyTitle.textContent = title;
-      storyText.textContent = content;
-      modal.classList.add("show");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    });
-  });
-
-  function closeStory() {
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  closeModal.addEventListener("click", closeStory);
-  modal.addEventListener("click", (e) => { if (e.target === modal) closeStory(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStory(); });
-
-  if (readButtons.length === 0) {
-    console.warn("No .read-btn buttons found. Make sure buttons have class=\"read-btn\".");
-  } else {
-    console.log("Read buttons count:", readButtons.length);
-  }
-});
-</script>
-
 </body>
 </html>

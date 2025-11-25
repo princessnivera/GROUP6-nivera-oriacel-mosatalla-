@@ -1,564 +1,389 @@
-// ========== FIREBASE IMPORTS (MUST BE AT TOP) ==========
-import { 
-    getBooksFromDB, 
-    registerUser, 
-    loginUser, 
-    logoutUser, 
-    auth 
-} from "./firebase.js";
+import { registerUser, loginUser, logoutUser, auth, loginWithGoogle, loginWithFacebook } from "./firebase.js";
+import { getBooksFromSupabase } from "./Supabaseclient.js";
 
+// ================= GLOBAL VARIABLES =================
+let globalBooks = []; 
 
-// ========== SMOOTH SCROLL ==========
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const target = document.querySelector(link.getAttribute("href"));
-    if (target) target.scrollIntoView({ behavior: "smooth" });
-  });
-});
-// ========== MOBILE MENU TOGGLE ==========
+// ================= MAIN INITIALIZATION =================
 document.addEventListener("DOMContentLoaded", () => {
-    // ... your existing code ...
+    console.log("🚀 System Initializing...");
+
+    // 1. Render Books (With Layout Fix)
+    renderBooks();
+
+    // 2. Initialize UI Components
+    initializeCarousel();
+    setupMobileMenu();
+    setupSearchBar();
+    setupScrollEffects();
     
-    // Mobile menu functionality
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const mobileNav = document.getElementById('mobileNav');
-    const mobileModeToggle = document.querySelector('.mobile-mode-toggle');
-    
-    if (mobileMenuToggle && mobileNav) {
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-            document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-        });
-        
-        // Close mobile menu when clicking on links
-        document.querySelectorAll('.mobile-nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-                document.body.style.overflow = '';
-            });
-        });
-    }
-    
-    if (mobileModeToggle) {
-        mobileModeToggle.addEventListener('click', () => {
-            body.classList.toggle("dark");
-            const isDark = body.classList.contains("dark");
-            darkModeToggle.innerHTML = isDark ? "☀️" : "🌙";
-            mobileModeToggle.querySelector('i').className = isDark ? "fas fa-sun" : "fas fa-moon";
-            mobileModeToggle.querySelector('span').textContent = isDark ? "Light Mode" : "Dark Mode";
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        });
-    }
-    
-    // Update dark mode icon in header
-    if (darkModeToggle) {
-        darkModeToggle.addEventListener("click", () => {
-            body.classList.toggle("dark");
-            const isDark = body.classList.contains("dark");
-            darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        });
-    }
+    // 3. Auth Listener
+    if (auth) auth.onAuthStateChanged(updateAuthUI);
+
+    // 4. Global Event Listeners (Read, Save, etc.)
+    setupEventDelegation();
 });
 
-// ========== SCROLL FADE EFFECT ==========
-const fadeElements = document.querySelectorAll(".fade-in");
-const appearOnScroll = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("appear");
-      appearOnScroll.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.2 });
-
-fadeElements.forEach(el => appearOnScroll.observe(el));
-
-
-// ========== SAVE TO LIBRARY ========== 
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("save-btn")) {
-    const button = e.target;
+// ================= 1. SMART BOOK RENDERING (LAYOUT FIX) =================
+async function renderBooks() {
+    console.log("⏳ Fetching books...");
     
+    const books = await getBooksFromSupabase(); 
     
-    let title = button.getAttribute("data-title");
-    let author = button.getAttribute("data-author");
-    let img = button.getAttribute("data-img");
+    const container = document.getElementById("dynamicCategoriesContainer");
+    if (!container) return;
 
-    
-    if (!title) {
-        // Fallback for hardcoded books without data-attributes
-        const bookElement = button.closest(".book, .book-card, .latest-books > .book");
-        if (bookElement) {
-             // Search for title/image in the hardcoded structure
-             title = bookElement.querySelector("strong, h3")?.textContent.trim() || "Untitled Book";
-             img = bookElement.querySelector("img")?.src || "";
-             author = "Unknown Author"; 
-        }
-    }
-    
-    if (!title) {
-        console.error("Could not find book title for saving.");
-        alert("Error saving book: Title not found.");
+    // Fallback if no books found
+    if (!books || books.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center; padding: 40px;">
+                <i class="fas fa-exclamation-circle" style="font-size: 2rem; color: #e74c3c;"></i>
+                <p>No books found in the library database.</p>
+            </div>`;
         return;
     }
 
-    let savedBooks = JSON.parse(localStorage.getItem("savedBooks")) || [];
-
-    if (savedBooks.some(book => book.title === title)) {
-      alert(`📚 "${title}" is already in your library!`);
-      return;
-    }
-
-    savedBooks.push({ title, author, img });
-    localStorage.setItem("savedBooks", JSON.stringify(savedBooks));
-
-    alert(`✅ "${title}" has been saved to your library!`);
-  }
-});
-
-
-function updateAuthUI(user) {
-    const accountToggle = document.getElementById("accountToggle");
-    const loginModal = document.getElementById("loginModal");
+    // Save to global variable for Reader
+    globalBooks = books; 
     
-    if (!accountToggle || !loginModal) return; 
+    // Clear Loading Spinner
+    container.innerHTML = "<h2>📖 Explore by Categories</h2>"; 
 
-    if (user) {
-      // User is logged in: Set icon to LOGOUT
-      accountToggle.innerHTML = "👋";
-      accountToggle.onclick = async () => {
-        await logoutUser();
-        updateAuthUI(null);
-      };
-      loginModal.classList.remove("show"); 
-      document.body.style.overflow = ""; // Enable scrolling/access
+    // --- STEP A: GROUP BOOKS BY CATEGORY ---
+    const categories = {};
+    books.forEach(book => {
+        // Use 'Others' if category is missing
+        const catName = book.category || "Others";
+        if (!categories[catName]) {
+            categories[catName] = [];
+        }
+        categories[catName].push(book);
+    });
 
-    } else {
-  
-      accountToggle.innerHTML = "👤";
-      accountToggle.onclick = () => {
-        loginModal.classList.add("show");
-        document.body.style.overflow = "hidden";
-      };
+    // --- STEP B: RENDER EACH CATEGORY SECTION ---
+    // Order of categories (Optional: prioritize specific ones)
+    const preferredOrder = ["Academic", "Romance", "Fantasy", "Sci-Fi", "Comics", "Action"];
+    
+    // Sort keys based on preference, then others
+    const sortedKeys = Object.keys(categories).sort((a, b) => {
+        const indexA = preferredOrder.indexOf(a);
+        const indexB = preferredOrder.indexOf(b);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.localeCompare(b);
+    });
 
-     
-      loginModal.classList.add("show");
-      document.body.style.overflow = "hidden"; // Disable scrolling on the main page
-    }
+    sortedKeys.forEach(catName => {
+        const categoryBooks = categories[catName];
+        
+        // Create Section Wrapper
+        const section = document.createElement("div");
+        section.className = "category"; // Matches CSS style
+        section.innerHTML = `<h3>${catName}</h3>`;
+
+        // Create Grid Container
+        const grid = document.createElement("div");
+        grid.className = "books"; // Matches CSS grid layout
+
+        // Create Cards
+        const cardsHTML = categoryBooks.map(book => {
+            const stars = generateStars(book.rating || 4); // Default to 4 if null
+            return `
+                <div class="book">
+                    <img src="${book.img_url || 'ASSETS/default.jpg'}" alt="${book.title}" loading="lazy">
+                    <p><strong>${book.title}</strong></p>
+                    <small>By ${book.author || 'Unknown'}</small>
+                    <div class="stars">${stars}</div>
+                    <button class="save-btn" 
+                        data-title="${book.title}" 
+                        data-author="${book.author}" 
+                        data-img="${book.img_url}">💾 Save</button>
+                    <button class="read-btn" data-title="${book.title}">📖 Read</button>
+                </div>
+            `;
+        }).join('');
+
+        grid.innerHTML = cardsHTML;
+        section.appendChild(grid);
+        container.appendChild(section);
+    });
+
+    // --- STEP C: RE-INITIALIZE ANIMATIONS ---
+    // Important: We call this AFTER elements are added to DOM
+    setupTiltEffect();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    if (auth) {
-        auth.onAuthStateChanged(updateAuthUI); 
-    }
-
-    const loginModal = document.getElementById("loginModal");
-    const closeLogin = document.getElementById("closeLogin");
-    const authForm = document.getElementById("authForm");
-    const registerButton = document.getElementById("registerButton");
-    const authEmail = document.getElementById("authEmail");
-    const authPassword = document.getElementById("authPassword");
-
-    
-   
-    if (closeLogin) {
-        closeLogin.addEventListener("click", (e) => {
-            e.preventDefault(); // I-block ang default action
-            alert("You must log in or register to close this window and access the library.");
-        });
-    }
-
-   
-    if (loginModal) {
-        loginModal.addEventListener("click", (e) => {
-            if (e.target === loginModal) {
-                e.preventDefault(); // I-block ang default action
-                alert("You must log in or register to close this window and access the library.");
-            }
-        });
-    }
-
-
-    if (authForm) {
-        authForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const email = authEmail.value;
-            const password = authPassword.value;
-            
-            try {
-               
-                await loginUser(email, password);
-                authEmail.value = "";
-                authPassword.value = "";
-            } catch (error) {
-                // Error handled in firebase.js
-            }
-        });
-    }
-    
-    // 3. REGISTER EVENT LISTENER (TAMA NA)
-    if (registerButton) {
-        registerButton.addEventListener("click", async () => {
-            const email = authEmail.value;
-            const password = authPassword.value;
-            
-            if (!email || !password) {
-                alert("Please enter both email and password for registration.");
-                return;
-            }
-            
-            try {
-                await registerUser(email, password);
-                authEmail.value = "";
-                authPassword.value = "";
-            } catch (error) {
-                // Error handled in firebase.js
-            }
-        });
-    }
-
-    // ========== SEARCH BAR TOGGLE & LOGIC (Updated) ==========
-    const searchToggle = document.getElementById("searchToggle");
-    const searchBar = document.querySelector("header .search-bar"); 
-    const searchInput = searchBar?.querySelector("input");
-    const searchButton = searchBar?.querySelector("button");
-
-    if (searchToggle && searchBar && searchInput && searchButton) {
-      
-      // 1. Search Toggle Functionality
-      searchToggle.addEventListener("click", () => {
-        searchBar.classList.toggle("show");
-        if (searchBar.classList.contains("show")) {
-          searchInput.focus();
+// Helper: Generate Star HTML
+function generateStars(rating) {
+    let starsHTML = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            starsHTML += '<i class="fas fa-star" style="color: gold;"></i>';
+        } else if (i - 0.5 === rating) {
+            starsHTML += '<i class="fas fa-star-half-alt" style="color: gold;"></i>';
+        } else {
+            starsHTML += '<i class="far fa-star" style="color: #ccc;"></i>';
         }
-      });
-      
-      // 2. Search Execution Logic
-      const executeSearch = (e) => {
-          e.preventDefault();
-          const query = searchInput.value;
-          if (query.length > 1) {
-            
-              const targetSection = document.getElementById("searchResultsSection");
-              if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
-              
-              filterAndRenderBooks(query);
-          } else {
-              alert("Please enter at least 2 characters to search.");
-          }
-      };
-
-      searchButton.addEventListener("click", executeSearch);
-      
-      searchInput.addEventListener("keypress", (e) => {
-          if (e.key === 'Enter') {
-              executeSearch(e);
-          }
-      });
-      
     }
-  // ========== SIMPLIFIED CAROUSEL FUNCTION ==========
-function initializeCarousel() {
-    console.log("Initializing carousel...");
+    return starsHTML;
+}
+
+// ================= 2. ANIMATIONS & EFFECTS =================
+function setupTiltEffect() {
+    const cards = document.querySelectorAll('.book');
     
+    if(cards.length === 0) return;
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate rotation
+            const xRot = -((y - rect.height/2)/20);
+            const yRot = ((x - rect.width/2)/20);
+            
+            card.style.transform = `perspective(1000px) scale(1.05) rotateX(${xRot}deg) rotateY(${yRot}deg)`;
+            card.style.zIndex = "10";
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'scale(1)';
+            card.style.zIndex = "1";
+            card.style.transition = 'transform 0.5s ease';
+        });
+
+        card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none'; // Snappy movement
+        });
+    });
+}
+
+function setupScrollEffects() {
+    // Fade In Elements on Scroll
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("appear");
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".category").forEach(el => observer.observe(el));
+}
+
+// ================= 3. CAROUSEL LOGIC =================
+function initializeCarousel() {
     const track = document.getElementById("carouselTrack");
     const prevBtn = document.getElementById("carouselPrev");
     const nextBtn = document.getElementById("carouselNext");
     
-    if (!track) {
-        console.error("Carousel track not found!");
-        return;
-    }
-    
-    if (!prevBtn || !nextBtn) {
-        console.error("Carousel buttons not found!");
-        return;
-    }
-
-    console.log("Carousel elements found:", { track, prevBtn, nextBtn });
+    if (!track || !prevBtn || !nextBtn) return;
 
     let currentPosition = 0;
-    let itemsPerView = 4; // Default for desktop
     
-    // Function to calculate how many items to show based on screen size
     function getItemsPerView() {
-        const width = window.innerWidth;
-        if (width <= 480) return 1;
-        if (width <= 768) return 2;
-        if (width <= 1024) return 3;
+        const w = window.innerWidth;
+        if (w <= 480) return 1;
+        if (w <= 768) return 2;
+        if (w <= 1024) return 3;
         return 4;
     }
     
-    // Function to get the width of one item including gap
     function getItemWidth() {
         if (track.children.length === 0) return 0;
-        
-        const firstItem = track.children[0];
-        const itemStyle = window.getComputedStyle(firstItem);
-        const itemWidth = firstItem.offsetWidth;
-        const gap = parseInt(window.getComputedStyle(track).gap) || 20;
-        
-        console.log("Item width calculation:", { itemWidth, gap });
-        return itemWidth + gap;
+        return track.children[0].offsetWidth + 20; // Width + Gap
     }
     
-    // Function to update carousel position
     function updateCarousel() {
-        itemsPerView = getItemsPerView();
         const itemWidth = getItemWidth();
-        const maxPosition = (track.children.length - itemsPerView) * itemWidth;
-        
-        // Ensure currentPosition doesn't go beyond limits
-        currentPosition = Math.max(0, Math.min(currentPosition, maxPosition));
-        
-        console.log("Moving carousel to:", currentPosition, "Max:", maxPosition);
-        
+        const maxPos = (track.children.length - getItemsPerView()) * itemWidth;
+        currentPosition = Math.max(0, Math.min(currentPosition, maxPos));
         track.style.transform = `translateX(-${currentPosition}px)`;
         
-        // Update button states
-        prevBtn.disabled = currentPosition === 0;
-        nextBtn.disabled = currentPosition >= maxPosition;
-        
-        console.log("Button states:", {
-            prevDisabled: prevBtn.disabled,
-            nextDisabled: nextBtn.disabled
-        });
+        prevBtn.disabled = currentPosition <= 0;
+        nextBtn.disabled = currentPosition >= maxPos;
     }
     
-    // Next button click handler
-    function nextSlide() {
-        console.log("Next button clicked");
-        const itemWidth = getItemWidth();
-        const maxPosition = (track.children.length - getItemsPerView()) * itemWidth;
-        
-        if (currentPosition < maxPosition) {
-            currentPosition += itemWidth * itemsPerView;
-            // If we're close to the end, snap to the exact end
-            if (currentPosition > maxPosition) {
-                currentPosition = maxPosition;
-            }
-            updateCarousel();
-        }
-    }
-    
-    // Previous button click handler
-    function prevSlide() {
-        console.log("Previous button clicked");
-        const itemWidth = getItemWidth();
-        
-        if (currentPosition > 0) {
-            currentPosition -= itemWidth * itemsPerView;
-            // Ensure we don't go below 0
-            if (currentPosition < 0) {
-                currentPosition = 0;
-            }
-            updateCarousel();
-        }
-    }
-    
-    // Event listeners
-    nextBtn.addEventListener('click', nextSlide);
-    prevBtn.addEventListener('click', prevSlide);
-    
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            console.log("Window resized, updating carousel...");
-            updateCarousel();
-        }, 250);
-    });
-    
-    // Initialize carousel after a short delay to ensure DOM is ready
-    setTimeout(() => {
-        console.log("Initial carousel setup");
+    nextBtn.addEventListener('click', () => {
+        currentPosition += getItemWidth() * getItemsPerView();
         updateCarousel();
-    }, 100);
-    
-    // Recalculate on images load (in case images affect layout)
-    const images = track.querySelectorAll('img');
-    let imagesLoaded = 0;
-    
-    images.forEach(img => {
-        if (img.complete) {
-            imagesLoaded++;
-        } else {
-            img.addEventListener('load', () => {
-                imagesLoaded++;
-                if (imagesLoaded === images.length) {
-                    console.log("All images loaded, updating carousel");
-                    updateCarousel();
-                }
-            });
-        }
     });
     
-    // If all images are already loaded
-    if (imagesLoaded === images.length && images.length > 0) {
-        setTimeout(updateCarousel, 100);
-    }
+    prevBtn.addEventListener('click', () => {
+        currentPosition -= getItemWidth() * getItemsPerView();
+        updateCarousel();
+    });
     
-    return {
-        nextSlide,
-        prevSlide,
-        updateCarousel
-    };
+    window.addEventListener('resize', () => setTimeout(updateCarousel, 200));
+    setTimeout(updateCarousel, 500); // Initial calc
 }
 
-// Initialize carousel when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM loaded, initializing carousel...");
-    const carousel = initializeCarousel();
+// ================= 4. AUTHENTICATION UI =================
+function updateAuthUI(user) {
+    const accountToggle = document.getElementById("accountToggle");
+    const loginModal = document.getElementById("loginModal");
+    const userInfo = document.querySelector(".user-info span");
     
-    // Make carousel globally available for debugging
-    window.carousel = carousel;
-});
+    if (!accountToggle || !loginModal) return; 
 
-// Also initialize if script loads after DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeCarousel);
-} else {
-    initializeCarousel();
-}
-    
-    // ========== STORY MODAL LOGIC (INILIPAT MULA SA index.html) ==========
-    const stories = {
-        "English Academic": "English Academic focuses on building students’ skills in reading, writing, and critical thinking...",
-        "Philippine History": "Philippine History explores the country’s journey from pre-colonial times to the present day...",
-        "Noli Me Tangere": "Noli Me Tangere is a novel written by Dr. José Rizal that exposed the injustices and corruption under Spanish rule...",
-        "Splinters": "Splinters tells the story of two people shattered by their pasts, both struggling to piece their lives back together...",
-        "Night Shade": "Night Shade is a tale of forbidden love wrapped in mystery and danger...",
-        "Romance Rivalry": "Romance Rivalry follows two best friends who find themselves in love with the same person...",
-        "Queen of Carrion": "Queen of Carrion is a dark fantasy about a fallen princess who rises from the ruins of her kingdom...",
-        "The Lottery": "The Lottery by Shirley Jackson is a chilling story about tradition, conformity, and human cruelty...",
-        "SwordHeart": "SwordHeart follows a reluctant hero who inherits a cursed sword bound to a warrior’s spirit...",
-        "Tear my World": "Tear My World is a science fiction story set in a future where humanity’s obsession with technology has torn the planet apart...",
-        "True Beauty": "True Beauty tells the story of a young woman who struggles with her self-image in a world obsessed with perfection...",
-        "My Fair Position": "My Fair Position blends romance and fantasy in a world where power and status define destiny...",
-        "Underworld": "Underworld follows a fallen warrior trapped in a realm between life and death...",
-        "Doom Breaker": "Doom Breaker tells the story of a warrior cursed by the gods and doomed to repeat his tragic fate...",
-        "His Into Her": "His Into Her is a high school romance filled with humor, rivalry, and heartfelt moments...",
-        "Echoes of Tomorrow": "Echoes of Tomorrow is a sci-fi story about time, memory, and the choices that define us...",
-        "Silent Fate": "Silent Fate tells the story of a novelist whose written words begin to alter reality..."
-    };
+    if (user) {
+        // LOGGED IN
+        accountToggle.innerHTML = "👋"; 
+        if(userInfo) userInfo.textContent = user.displayName || user.email.split('@')[0];
+        
+        accountToggle.onclick = async () => {
+            if(confirm("Log out now?")) await logoutUser();
+        };
 
-    const modal = document.getElementById("storyModal");
-    const storyTitle = document.getElementById("storyTitle");
-    const storyText = document.getElementById("storyText");
-    const closeModal = document.getElementById("closeModal");
+        const dropdownLogout = document.querySelector(".logout-btn");
+        if(dropdownLogout) dropdownLogout.onclick = async () => await logoutUser();
 
-    function extractTitleFromCard(card) {
-      if (!card) return null;
-      // Mas marami pang selectors para masigurado na makuha ang title
-      const selectors = ["h3", "h4", "h2", "strong", "p > strong", ".title"];
-      for (const sel of selectors) {
-        const el = card.querySelector(sel);
-        if (el && el.textContent.trim()) return el.textContent.trim();
-      }
-      const fallback = card.querySelector(".book-info h3");
-      if (fallback) return fallback.textContent.trim();
-      return null;
-    }
+        loginModal.classList.remove("show"); 
+        document.body.style.overflow = ""; 
 
-    // Attach read button listener globally (since dynamic content needs it)
-    document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("read-btn")) {
-            const btn = e.target;
-            const card = btn.closest(".book, .book-card, .latest-books > .book") || btn.parentElement;
-            const title = btn.getAttribute("data-title") || extractTitleFromCard(card) || "Untitled Book"; 
-            const content = stories[title] || "Sorry — this story is not yet available. Add it to the 'stories' object in the script.";
-            
-            storyTitle.textContent = title;
-            storyText.textContent = content;
-            modal.classList.add("show");
-            modal.setAttribute("aria-hidden", "false");
+    } else {
+        // LOGGED OUT
+        accountToggle.innerHTML = '<i class="fas fa-user"></i>';
+        if(userInfo) userInfo.textContent = "Guest User";
+
+        accountToggle.onclick = () => {
+            loginModal.classList.add("show");
             document.body.style.overflow = "hidden";
+        };
+    }
+}
+
+// ================= 5. GLOBAL EVENT HANDLER (Clean & Efficient) =================
+function setupEventDelegation() {
+    document.addEventListener("click", (e) => {
+        const target = e.target;
+
+        // --- READ BUTTON ---
+        if (target.classList.contains("read-btn")) {
+            const title = target.getAttribute("data-title");
+            const book = globalBooks.find(b => b.title === title) || { title: title, author: "Unknown" };
+            openReader(book);
+        }
+
+        // --- SAVE BUTTON ---
+        if (target.classList.contains("save-btn")) {
+            const title = target.getAttribute("data-title");
+            const author = target.getAttribute("data-author");
+            const img = target.getAttribute("data-img");
+
+            let saved = JSON.parse(localStorage.getItem("savedBooks")) || [];
+            if (!saved.some(b => b.title === title)) {
+                saved.push({ title, author, img, read: false });
+                localStorage.setItem("savedBooks", JSON.stringify(saved));
+                alert(`✅ Saved "${title}" to Library!`);
+            } else {
+                alert(`📚 "${title}" is already saved.`);
+            }
+        }
+
+        // --- CLOSE MODALS ---
+        if (target.id === "closeLogin" || target === document.getElementById("loginModal")) {
+            document.getElementById("loginModal").classList.remove("show");
+            document.body.style.overflow = "";
         }
     });
 
-    function closeStory() {
-      if (modal) {
-          modal.classList.remove("show");
-          modal.setAttribute("aria-hidden", "true");
-          document.body.style.overflow = "";
-      }
-    }
-
-    if (closeModal) closeModal.addEventListener("click", closeStory);
-    if (modal) modal.addEventListener("click", (e) => { if (e.target === modal) closeStory(); });
-    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeStory(); });
-    
-    const subscribeForms = document.querySelectorAll(".subscribe-form");
-    const subscribeForm = subscribeForms[subscribeForms.length - 1]; // Kunin ang form sa info-section
-    const emailInput = subscribeForm ? subscribeForm.querySelector("input[type='email']") : null;
-
-    if (subscribeForm && emailInput) {
-        subscribeForm.addEventListener("submit", async (e) => {
+    // --- LOGIN FORM ---
+    const authForm = document.getElementById("authForm");
+    if(authForm) {
+        authForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const email = emailInput.value;
-
-            try {
-              
-                const response = await fetch('/api/subscribe', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: email })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert("✅ Subscription Successful: " + data.message);
-                    emailInput.value = ''; // Clear input
-                } else {
-                    alert("❌ Subscription Failed: " + data.error);
-                }
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                alert("An error occurred during subscription.");
-            }
+            const email = document.getElementById("authEmail").value;
+            const pass = document.getElementById("authPassword").value;
+            await loginUser(email, pass);
         });
     }
 
-}); 
+    // --- SOCIAL LOGIN ---
+    document.querySelector(".google-btn")?.addEventListener("click", loginWithGoogle);
+    document.querySelector(".facebook-btn")?.addEventListener("click", loginWithFacebook);
+}
 
-// script.js (Rendering Books)
-async function renderBooks() {
-    // 1. Fetch data from Firestore
-    const books = await getBooksFromDB(); 
-    const container = document.getElementById("dynamicCategoriesContainer");
+// ================= 6. READER MODAL =================
+function openReader(book) {
+    const modal = document.getElementById("storyModal");
+    const titleEl = document.getElementById("readerTitle") || document.getElementById("storyTitle");
+    const chapterList = document.getElementById("chapterList");
+    const storyText = document.getElementById("storyText");
+    const closeBtn = document.getElementById("closeModal");
 
-    if (!container) return;
-    
-    
-    
-    const dynamicBooksWrapper = document.createElement('div');
-    dynamicBooksWrapper.id = 'dynamicBooksWrapper';
-    dynamicBooksWrapper.innerHTML = '<h3>✨ Dynamic Books from Firestore (Test)</h3><div class="books"></div>';
-    
-    const booksHTML = books.map(book => `
-        <div class="book">
-            <img src="${book.img_url || 'ASSETS/default.jpg'}" alt="${book.title}">
-            <p><strong>${book.title}</strong></p>
-            <small>By ${book.author || 'N/A'}</small>
-            <button class="save-btn" data-title="${book.title}" data-author="${book.author}">💾 Save</button>
-            <button class="read-btn" data-title="${book.title}">📖 Read</button>
-        </div>
-    `).join('');
+    if (!modal) return;
 
-    dynamicBooksWrapper.querySelector('.books').innerHTML = booksHTML;
+    // Set Title
+    if (titleEl) titleEl.textContent = book.title;
 
-    // 4. Append the generated HTML to the container
-    if (books.length > 0) {
-        container.appendChild(dynamicBooksWrapper);
+    // Reset
+    if (chapterList) chapterList.innerHTML = "";
+    if (storyText) storyText.innerHTML = "<p>Select a chapter to start reading.</p>";
+
+    // Check Chapters
+    if (book.chapters && Array.isArray(book.chapters) && book.chapters.length > 0) {
+        // Build Sidebar
+        book.chapters.forEach((chap) => {
+            const li = document.createElement("li");
+            li.className = "chapter-item";
+            li.textContent = chap.title;
+            li.onclick = () => {
+                storyText.innerHTML = `<h3>${chap.title}</h3><div style="white-space: pre-wrap;">${chap.content}</div>`;
+                document.querySelectorAll('.chapter-item').forEach(i => i.classList.remove('active'));
+                li.classList.add('active');
+            };
+            chapterList.appendChild(li);
+        });
+
+        // Load First Chapter automatically
+        chapterList.children[0].click();
+
+    } else {
+        if(storyText) storyText.innerHTML = `
+            <div style="padding:30px; text-align:center;">
+                <h3>Coming Soon</h3>
+                <p>The content for <strong>${book.title}</strong> is being digitized.</p>
+            </div>`;
+    }
+
+    modal.classList.add("show");
+    document.body.style.overflow = "hidden";
+
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            modal.classList.remove("show");
+            document.body.style.overflow = "";
+        };
     }
 }
 
-// 5. Call the function on page load 
-document.addEventListener("DOMContentLoaded", renderBooks);
+// ================= 7. UI HELPERS =================
+function setupMobileMenu() {
+    const toggle = document.getElementById('mobileMenuToggle');
+    const nav = document.getElementById('mobileNav');
+    
+    if (toggle && nav) {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nav.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+            if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.classList.remove('active');
+        });
+    }
+}
+
+function setupSearchBar() {
+    const toggle = document.getElementById("searchToggle");
+    const bar = document.querySelector("header .search-bar");
+    if (toggle && bar) {
+        toggle.addEventListener("click", () => {
+            bar.classList.toggle("show");
+            if(bar.classList.contains("show")) document.getElementById("headerSearchInput")?.focus();
+        });
+    }
+}

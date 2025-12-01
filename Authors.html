@@ -9,6 +9,7 @@
   <script type="module" src="script.js"></script>
 </head>
 <body>
+  <!-- Enhanced Header -->
   <header>
     <div class="header-container">
       <div class="header-brand">
@@ -24,311 +25,451 @@
       <nav class="navbar">
         <div class="nav-container">
           <a href="index.html" class="nav-link" data-section="home">
-            <i class="fas fa-home"></i> <span>Home</span>
+            <i class="fas fa-home"></i>
+            <span>Home</span>
           </a>
           <a href="Featured.html" class="nav-link" data-section="featured">
-            <i class="fas fa-star"></i> <span>Featured</span>
+            <i class="fas fa-star"></i>
+            <span>Featured</span>
           </a>
           <a href="Event.html" class="nav-link" data-section="events">
-            <i class="fas fa-calendar-alt"></i> <span>Events</span>
+            <i class="fas fa-calendar-alt"></i>
+            <span>Events</span>
           </a>
           <a href="Authors.html" class="nav-link active" data-section="authors">
-            <i class="fas fa-user-edit"></i> <span>Authors</span>
+            <i class="fas fa-user-edit"></i>
+            <span>Authors</span>
           </a>
           <a href="Library.html" class="nav-link" data-section="library">
-            <i class="fas fa-book-open"></i> <span>My Library</span>
+            <i class="fas fa-book-open"></i>
+            <span>My Library</span>
           </a>
         </div>
       </nav>
 
-      <div class="header-actions">
         <div class="action-icons">
-          <button class="icon-btn search-toggle" id="searchToggle"><i class="fas fa-search"></i></button>
+          <button class="icon-btn search-toggle" id="searchToggle" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+          
           <div class="user-menu">
-            <button class="icon-btn user-toggle" id="accountToggle"><i class="fas fa-user"></i></button>
+            <button class="icon-btn user-toggle" id="accountToggle" aria-label="Account">
+              <i class="fas fa-user"></i>
+            </button>
+            <div class="user-dropdown">
+              <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span>Guest User</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item">
+                <i class="fas fa-bookmark"></i>
+                My Collections
+              </a>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Sign In
+              </button>
+            </div>
           </div>
-          <button class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></button>
+
+          <button class="icon-btn mode-toggle" id="modeToggle" aria-label="Toggle Dark Mode">
+            <i class="fas fa-moon"></i>
+          </button>
+
+          <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+          </button>
         </div>
       </div>
     </div>
-    
+
+    <!-- Mobile Navigation -->
     <div class="mobile-nav" id="mobileNav">
       <div class="mobile-nav-content">
-        <a href="index.html" class="mobile-nav-link">Home</a>
-        <a href="Authors.html" class="mobile-nav-link active">Authors</a>
+        <a href="index.html" class="mobile-nav-link">
+          <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
+        <a href="Featured.html" class="mobile-nav-link">
+          <i class="fas fa-star"></i>
+          <span>Featured</span>
+        </a>
+        <a href="Event.html" class="mobile-nav-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Events</span>
+        </a>
+        <a href="Authors.html" class="mobile-nav-link active">
+          <i class="fas fa-user-edit"></i>
+          <span>Authors</span>
+        </a>
+        <a href="Library.html" class="mobile-nav-link">
+          <i class="fas fa-book-open"></i>
+          <span>My Library</span>
+        </a>
+        <div class="mobile-nav-actions">
+          <button class="mobile-mode-toggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+          </button>
         </div>
+      </div>
     </div>
   </header>
 
+  <!-- Authors Hero Section -->
+  <section class="authors-hero">
+    <div class="hero-content">
+      <h1>✍️ Meet Our Authors</h1>
+      <p>Discover the brilliant minds and creative souls behind your favorite literary masterpieces</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">500+</span>
+          <span class="stat-label">Featured Authors</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">10K+</span>
+          <span class="stat-label">Published Works</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">50+</span>
+          <span class="stat-label">Literary Awards</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-background">
+      <div class="floating-icon"><i class="fas fa-pen-fancy"></i></div>
+      <div class="floating-icon"><i class="fas fa-book"></i></div>
+      <div class="floating-icon"><i class="fas fa-quote-right"></i></div>
+    </div>
+  </section>
+
+  <!-- Authors Filter Section -->
+  <section class="authors-filter">
+    <div class="container">
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">All Authors</button>
+        <button class="filter-tab" data-filter="bestselling">Bestselling</button>
+        <button class="filter-tab" data-filter="fantasy">Fantasy</button>
+        <button class="filter-tab" data-filter="classic">Classic</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Authors Section -->
   <section class="authors-section">
     <div class="container">
-      <h2>✍️ Meet Our Authors</h2>
-      <p class="section-subtitle">Discover the brilliant minds behind your favorite books</p>
-
-      <div class="authors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+      <div class="authors-grid">
         
-        <div class="author-card">
+        <!-- Author Card 1 -->
+        <div class="author-card" data-category="bestselling fantasy">
           <div class="author-image">
             <img src="ASSETS/author1.jpg" alt="J.K. Rowling" onerror="this.src='ASSETS/default.jpg'">
-            <div class="author-badge">Bestselling</div>
+            <div class="author-badge bestselling">Bestselling</div>
+            <div class="author-social">
+              <button class="social-btn" aria-label="Follow author">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
           <div class="author-details">
             <h3>J.K. Rowling</h3>
-            <p class="author-bio">Author of the world-famous Harry Potter series.</p>
-            <div class="author-stats">
-              <span class="books-count">📚 15+ Books</span>
-              <span class="rating">★★★★★</span>
+            <p class="author-genre">Fantasy Fiction</p>
+            <div class="author-rating">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <span class="rating-text">4.9/5</span>
             </div>
-            <div class="famous-works">
-              <strong>Famous Works:</strong> Harry Potter Series, The Casual Vacancy
+            <p class="author-bio">Author of the world-famous Harry Potter series that has captivated millions of readers worldwide with magical storytelling.</p>
+            <div class="author-actions">
+              <button class="btn-follow">
+                <i class="fas fa-user-plus"></i>
+                Follow
+              </button>
             </div>
           </div>
         </div>
 
-        <div class="author-card">
+        <!-- Author Card 2 -->
+        <div class="author-card" data-category="fantasy award">
           <div class="author-image">
             <img src="ASSETS/author2.jpg" alt="George R.R. Martin" onerror="this.src='ASSETS/default.jpg'">
-            <div class="author-badge">Epic Fantasy</div>
+            <div class="author-badge epic">Epic Fantasy</div>
+            <div class="author-social">
+              <button class="social-btn" aria-label="Follow author">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
           <div class="author-details">
             <h3>George R.R. Martin</h3>
-            <p class="author-bio">Known for his epic fantasy series *A Song of Ice and Fire*.</p>
-            <div class="author-stats">
-              <span class="books-count">📚 25+ Books</span>
-              <span class="rating">★★★★★</span>
+            <p class="author-genre">Epic Fantasy</p>
+            <div class="author-rating">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <span class="rating-text">4.7/5</span>
             </div>
-            <div class="famous-works">
-              <strong>Famous Works:</strong> A Song of Ice and Fire, Fire & Blood
+            <p class="author-bio">Master of epic fantasy known for his intricate world-building and complex characters in A Song of Ice and Fire series.</p>
+            <div class="author-actions">
+              <button class="btn-follow">
+                <i class="fas fa-user-plus"></i>
+                Follow
+              </button>
             </div>
           </div>
         </div>
 
-        <div class="author-card">
+        <!-- Author Card 3 -->
+        <div class="author-card featured" data-category="classic award">
           <div class="author-image">
             <img src="ASSETS/author3.jpg" alt="Jane Austen" onerror="this.src='ASSETS/default.jpg'">
-            <div class="author-badge">Classic Literature</div>
+            <div class="author-badge classic">Classic Literature</div>
+            <div class="author-social">
+              <button class="social-btn" aria-label="Follow author">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="featured-badge">Literary Legend</div>
           </div>
           <div class="author-details">
             <h3>Jane Austen</h3>
-            <p class="author-bio">One of the most beloved authors of English literature.</p>
-            <div class="author-stats">
-              <span class="books-count">📚 6 Major Novels</span>
-              <span class="rating">★★★★★</span>
+            <p class="author-genre">Classic Literature</p>
+            <div class="author-rating">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <span class="rating-text">5.0/5</span>
             </div>
-            <div class="famous-works">
-              <strong>Famous Works:</strong> Pride and Prejudice, Sense and Sensibility
+            <p class="author-bio">One of the most beloved authors of English literature, known for her sharp wit and social commentary on 19th-century British society.</p>
+            <div class="author-actions">
+              <button class="btn-follow">
+                <i class="fas fa-user-plus"></i>
+                Follow
+              </button>
             </div>
           </div>
         </div>
 
-        <div class="author-card">
+        <!-- Author Card 4 -->
+        <div class="author-card" data-category="contemporary inspirational">
           <div class="author-image">
             <img src="ASSETS/author4.jpg" alt="Paulo Coelho" onerror="this.src='ASSETS/default.jpg'">
-            <div class="author-badge">Inspirational</div>
+            <div class="author-badge inspirational">Inspirational</div>
+            <div class="author-social">
+              <button class="social-btn" aria-label="Follow author">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
           </div>
           <div class="author-details">
             <h3>Paulo Coelho</h3>
-            <p class="author-bio">A Brazilian novelist famous for his inspirational works.</p>
-            <div class="author-stats">
-              <span class="books-count">📚 30+ Books</span>
-              <span class="rating">★★★★☆</span>
+            <p class="author-genre">Inspirational Fiction</p>
+            <div class="author-rating">
+              <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <span class="rating-text">4.8/5</span>
             </div>
-            <div class="famous-works">
-              <strong>Famous Works:</strong> The Alchemist, Brida, Eleven Minutes
+            <p class="author-bio">A Brazilian novelist famous for his inspirational works that explore spiritual journeys and personal legends.</p>
+            <div class="author-actions">
+              <button class="btn-follow">
+                <i class="fas fa-user-plus"></i>
+                Follow
+              </button>
             </div>
           </div>
         </div>
 
-      </div> </div>
+      </div>
+    </div>
   </section>
 
   <!-- Enhanced Footer -->
-
   <footer id="contact">
-
     <div class="footer-content">
-
       <div class="footer-logo">
-
         <h3>📚 Digital Library Hub</h3>
-
         <p>Your gateway to endless reading adventures</p>
-
       </div>
-
       
-
       <div class="footer-links">
-
         <div class="footer-column">
-
           <h4>Explore</h4>
-
           <ul>
-
             <li><a href="index.html">Home</a></li>
-
             <li><a href="Featured.html">Featured Books</a></li>
-
             <li><a href="Library.html">My Library</a></li>
-
             <li><a href="Event.html">Events</a></li>
-
           </ul>
-
         </div>
-
         
-
         <div class="footer-column">
-
           <h4>Support</h4>
-
           <ul>
-
             <li><a href="#">Help Center</a></li>
-
-            <li><a href="#">Contact Us
-
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
             <li><a href="#">Terms of Service</a></li>
-
           </ul>
-
         </div>
-
         
-
         <div class="footer-column">
-
           <h4>Connect With Us</h4>
-
           <div class="footer-socials">
-
             <a href="#" class="social-link facebook" aria-label="Facebook">
-
               <i class="fab fa-facebook-f"></i>
-
             </a>
-
             <a href="#" class="social-link twitter" aria-label="Twitter">
-
               <i class="fab fa-twitter"></i>
-
             </a>
-
             <a href="#" class="social-link instagram" aria-label="Instagram">
-
               <i class="fab fa-instagram"></i>
-
             </a>
-
             <a href="#" class="social-link youtube" aria-label="YouTube">
-
               <i class="fab fa-youtube"></i>
-
             </a>
-
           </div>
-
           <div class="newsletter-signup">
-
-            <p>Stay updated with our latest books</p>
-
+            <p>Stay updated with new authors</p>
             <form class="footer-newsletter">
-
               <input type="email" placeholder="Your email address" required>
-
               <button type="submit">Subscribe</button>
-
             </form>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
     
-
     <div class="footer-bottom">
-
       <div class="footer-bottom-content">
-
         <p>&copy; 2025 Digital Library Hub. All Rights Reserved.</p>
-
         <div class="footer-legal">
-
           <a href="#">Privacy</a>
-
           <span class="separator">|</span>
-
           <a href="#">Terms</a>
-
           <span class="separator">|</span>
-
           <a href="#">Cookies</a>
-
         </div>
-
       </div>
-
     </div>
-
   </footer>
 
+<!-- ===== LOGIN / REGISTER MODAL (paste before </body>) ===== -->
+<div class="login-modal" id="loginModal" aria-hidden="true">
+  <div class="login-content" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <span class="close" id="closeLoginBtn" title="Close">✖</span>
 
+    <h2 id="authTitle">Access Your Library</h2>
+    <p id="authSubtitle">Login to access your library</p>
 
-  <!-- Login Modal -->
+    <form id="authForm" autocomplete="on">
+      <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input id="authEmail" type="email" required placeholder="Email">
+      </div>
 
-  <div id="loginModal" class="login-modal">
+      <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input id="authPassword" type="password" required placeholder="Password">
+      </div>
 
-    <div class="login-content">
+      <div class="form-options">
+        <label class="remember-me"><input id="rememberMe" type="checkbox"> Remember me</label>
+        <a class="forgot-password" href="#">Forgot?</a>
+      </div>
 
-      <span id="closeLogin" class="close">&times;</span>
+      <div class="error-box" id="authErrorMessage"></div>
 
-      <h2>Access Your Library</h2>
+      <button id="authSubmitBtn" class="btn-login" type="submit">Login</button>
+    </form>
 
-      <form id="authForm">
+    <p class="login-divider"><span>or continue with</span></p>
 
-        <div class="input-group">
-
-          <i class="fas fa-envelope"></i>
-
-          <input type="email" id="authEmail" placeholder="Email Address" required>
-
-        </div>
-
-        <div class="input-group">
-
-          <i class="fas fa-lock"></i>
-
-          <input type="password" id="authPassword" placeholder="Password" required>
-
-        </div>
-
-        <div class="form-options">
-
-          <label class="remember-me">
-
-            <input type="checkbox"> Remember me
-
-          </label>
-
-          <a href="#" class="forgot-password">Forgot Password?</a>
-
-        </div>
-
-        <button type="submit" id="loginButton" class="btn-login">Login</button>
-
-        <button type="button" id="registerButton" class="btn-register">Create New Account</button>
-
-      </form>
-
+    <div class="social-login">
+      <button id="googleLoginBtn" class="social-btn"><i class="fab fa-google"></i> Google</button>
+      <button id="facebookLoginBtn" class="social-btn"><i class="fab fa-facebook"></i> Facebook</button>
     </div>
 
+    <p style="margin-top:12px; font-size:.9rem; text-align:center;">
+      <span id="authSwitchText">Don't have an account? </span>
+      <button id="toggleAuthMode" class="btn-register" style="display:inline-block; padding:6px 10px; font-size:.9rem;">Create Account</button>
+    </p>
   </div>
+</div>
 
+  <script type="module">
+    import { getBooksFromSupabase } from "./Supabaseclient.js";
+    import { openReader } from "./script.js";
+
+    // --- VARIABLES ---
+    let allBooks = [];
+
+    // --- INITIALIZATION ---
+    window.addEventListener('load', async () => {
+      // Fetch books once to use for filtering
+      allBooks = await getBooksFromSupabase();
+      
+      setupButtons();
+      setupSearch();
+    });
+
+    // --- SETUP BUTTONS ---
+    function setupButtons() {
+      // 1. Follow Button Logic
+      document.querySelectorAll('.btn-follow').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const isFollowing = this.classList.toggle('following');
+          if (isFollowing) {
+            this.innerHTML = '<i class="fas fa-check"></i> Following';
+            this.style.background = '#10b981';
+            this.style.color = 'white';
+            this.style.borderColor = '#10b981';
+          } else {
+            this.innerHTML = '<i class="fas fa-user-plus"></i> Follow';
+            this.style.background = '';
+            this.style.color = '';
+            this.style.borderColor = '';
+          }
+        });
+      });
+    }
+
+
+      // Filter Tabs
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          
+          const filter = this.getAttribute('data-filter');
+          document.querySelectorAll('.author-card').forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+  </script>
 </body>
 </html>

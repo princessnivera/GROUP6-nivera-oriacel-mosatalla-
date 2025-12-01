@@ -1,20 +1,23 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  signOut,
-  GoogleAuthProvider,   // <--- Added this
-  FacebookAuthProvider, // <--- Added this
-  signInWithPopup       // <--- Added this
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword,
+    signOut,
+    GoogleAuthProvider,
+    FacebookAuthProvider,
+    signInWithPopup
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  getDocs, 
-  setDoc 
+    getFirestore, 
+    collection, 
+    doc, 
+    getDocs, 
+    setDoc,
+    deleteDoc,         // <--- NEW: For removing books from library
+    serverTimestamp    // <--- NEW: For adding a save timestamp
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyCOq2iKWlFv3lWWt9l5JdDyXgKyT4DICtk",
@@ -135,4 +138,5 @@ export async function getBooksFromDB() {
   }
 }
 
-export { auth };
+// Dapat nasa dulo ito ng iyong firebase.js file:
+export { auth, db };
